@@ -5,15 +5,15 @@
 :root{--bg:#0a0912;--pk:#ff2e97;--cy:#25e8ff;--yl:#ffe14a;--vi:#9a5cff;--ui:'Gowun Dodum',sans-serif;--se:'Do Hyeon','Gowun Dodum',sans-serif;--px:'Press Start 2P',monospace}
 *{box-sizing:border-box;margin:0;scrollbar-width:none}*::-webkit-scrollbar{display:none}
 html,body{height:100dvh;overflow:hidden}
-body{background:var(--bg);color:#e9e6ff;font:14px/1.4 var(--ui);padding:max(env(safe-area-inset-top),6px) 6px max(env(safe-area-inset-bottom),3px)}
+body{display:flex;background:var(--bg);color:#e9e6ff;font:14px/1.4 var(--ui);padding:max(env(safe-area-inset-top),6px) 6px max(env(safe-area-inset-bottom),3px)}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.17;mix-blend-mode:screen;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:98;background:repeating-linear-gradient(0deg,#0000 0 2px,#0004 2px 3px)}
-#app{height:100%;display:flex;flex-direction:column;gap:6px;max-width:750px;margin:auto}
+#app{height:100%;display:flex;flex-direction:column;gap:6px;width:100%;max-width:750px;max-height:calc(var(--th) + 36px + 640px + 90px);margin:auto}
 header{display:flex;align-items:center;gap:8px;border:2px solid var(--vi);border-radius:8px;padding:5px 8px;background:linear-gradient(90deg,#2a1250,#10304a);box-shadow:0 0 12px #9a5cff66}
 .logo{font:12px var(--px);color:var(--yl);text-shadow:0 0 8px var(--pk);margin-right:auto}
 .tab,.gear{font:9px var(--px);color:var(--cy);background:none;border:0;padding:6px 4px;cursor:pointer}.tab.on{color:var(--yl);text-shadow:0 0 8px var(--yl);border-bottom:2px solid var(--pk)}.gear{font-size:16px}
 .pane{border:2px solid var(--cy);border-radius:8px;background:#100f1c;box-shadow:inset 0 0 20px #0008,0 0 10px #25e8ff44;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-#T{flex:none;height:calc(var(--th) + 36px)}#B{flex:1}#msg:empty{display:none}
+#T{flex:none;height:calc(var(--th) + 36px)}#B{flex:1;min-height:260px;max-height:640px}#msg:empty{display:none}
 .row{display:flex;flex:1;min-height:0;align-items:stretch}
 .pb{font:14px var(--px);width:26px;background:none;border:0;color:var(--pk);cursor:pointer}.pb:disabled{opacity:.2}
 .pc{width:66px;flex:none;align-self:center;cursor:pointer;text-align:center;font-size:11px;transition:.15s}.pc:nth-child(odd){transform:rotate(-2deg)}.pc:nth-child(even){transform:rotate(2deg)}
@@ -28,12 +28,12 @@ h2{font:22px var(--se);color:#fff;text-shadow:0 0 8px var(--vi)}h4{font:9px var(
 .l{font-size:13px;margin:3px 0;color:#cfcaf0}.l b{color:var(--yl);font-weight:400}.rv{white-space:pre-wrap;margin-top:6px;border-left:3px solid var(--pk);padding-left:8px}.mut{color:#8a86a8;font-size:12px}
 .st5{color:var(--yl);letter-spacing:1px}.err{background:#5a1030;border:1px solid var(--pk);padding:5px 8px;margin:4px;font-size:12px}
 label{display:block;font-size:11px;color:var(--cy);margin-top:7px}input,select,textarea{width:100%;font:inherit;background:#07060f;color:#fff;border:1px solid #5b4b8a;border-radius:3px;padding:5px}textarea{min-height:64px}.ck{display:inline-flex;gap:3px;align-items:center;margin:2px 8px 2px 0;color:#fff;font-size:13px}.ck input{width:auto}
-#lg{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;padding:30px}#lg[hidden]{display:none}#lg h1{font:22px var(--px);color:var(--yl);text-shadow:0 0 12px var(--pk)}#lg input{max-width:280px}
+#lg{position:fixed;inset:0;z-index:101;background:var(--bg);display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;padding:30px}#lg[hidden]{display:none}#lg h1{font:22px var(--px);color:var(--yl);text-shadow:0 0 12px var(--pk)}#lg input{max-width:280px}
 .strip{display:flex;gap:6px;overflow-x:auto;padding:14px 8px;background:#050408;position:relative;flex:none;min-height:96px}
 .strip::before,.strip::after{content:'';position:absolute;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#e8e4ff 0 7px,#0000 7px 14px);opacity:.75;pointer-events:none}.strip::before{top:3px}.strip::after{bottom:3px}
 .fr{flex:none;width:76px;height:64px;position:relative;background:#1a1730;border:2px solid #000;outline:1px solid #555;overflow:hidden;cursor:pointer;font-size:10px;line-height:1.25;padding:4px;color:var(--yl);user-select:none;-webkit-user-select:none}.fr.on{outline:2px solid var(--pk);box-shadow:0 0 10px var(--pk)}.fr.dr{opacity:.6;transform:scale(1.08);z-index:3}.fr small{position:absolute;left:2px;bottom:0;color:#fff;font-size:8px;text-shadow:0 0 3px #000;z-index:2}
 .big .cap{position:absolute;top:3px;left:6px;z-index:2;font-size:11px;color:var(--cy);text-shadow:0 0 3px #000}
-.shelf{flex:1;display:flex;align-items:flex-end;gap:3px;padding:14px 4px 8px;min-width:0;overflow:hidden;border-bottom:6px solid #3a2a55}
+.shelf{position:relative;z-index:100;flex:1;display:flex;align-items:flex-end;gap:3px;padding:14px 4px 8px;min-width:0;overflow:hidden;border-bottom:6px solid #3a2a55}
 .rw{display:flex;gap:8px;margin-top:7px;align-items:center}.cell{display:flex;align-items:center;gap:4px;flex:1;min-width:0;flex-wrap:wrap}.cell.full{justify-content:center}.cell.y{flex:0 0 96px}.cell.st{flex:.7}.cell.d{flex:1.5}
 .k{margin:0!important;font-size:10px;white-space:nowrap;color:var(--cy)}.cell input,.cell select,.cell textarea{flex:1;width:auto;min-width:0}
 .pst.imgp{display:flex;align-items:center;justify-content:center;border:1px dashed var(--cy)}.pst.person{width:140px;height:140px}.pst.scene{width:100%;max-width:340px;height:auto;aspect-ratio:16/9}.pst.imgp[data-pick]{cursor:pointer}.phl{color:var(--cy);font:9px var(--px)}
@@ -51,19 +51,20 @@ label{display:block;font-size:11px;color:var(--cy);margin-top:7px}input,select,t
 .cell input,.cell select{width:100%;height:30px}.cell textarea{width:100%;min-height:64px}.k{font-size:10px;margin:0!important}
 .dt{display:flex;gap:3px;position:relative}.cal{flex:none;width:30px;height:30px;background:#1d1a33;border:1px solid #5b4b8a;border-radius:3px;cursor:pointer}.pk{position:absolute!important;right:0;top:0;width:30px!important;opacity:0;pointer-events:none}
 .sp{display:flex;gap:12px;align-items:flex-start}.sl{flex:none}.sl.sq{width:140px}.sr{flex:1;min-width:0}.sr h2{margin-bottom:2px}
-@media(max-width:560px){.sp{flex-direction:column;align-items:center}.sr{width:100%}}
+@media(max-width:340px){.sp{flex-direction:column;align-items:center}.sr{width:100%}}
 .chips{display:flex;flex-wrap:wrap;gap:4px;align-items:center}.chip{background:#1d1a33;border:1px solid var(--cy);border-radius:10px;padding:1px 6px;font-size:12px}.chip b{color:var(--pk);cursor:pointer;margin-left:4px}.chips select{width:auto!important;min-width:96px;height:26px!important}
 .cr{display:grid;grid-template-columns:1fr 1fr 36px 16px;gap:4px;margin-top:4px;align-items:center}.cr input,.cr select{width:100%;height:30px}.cr b{color:var(--pk);cursor:pointer;text-align:center}.pst.mini{width:36px;height:36px;margin:0;border-style:dashed}
 .cands{flex-wrap:wrap;width:140px;margin-top:4px}
-.big{flex:none;width:calc(100% - 16px);max-width:calc((100dvh - var(--th) - 250px)*1.78);aspect-ratio:16/9;margin:8px auto;position:relative;background:#000;border:2px solid var(--vi);display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;box-shadow:inset 0 0 30px #000}.big img{object-fit:contain}
 .big p{position:relative;padding:14px;font-family:var(--se);color:#fff;text-shadow:0 0 8px #000,0 0 3px #000;white-space:pre-wrap;z-index:1;max-height:100%;overflow:auto}.big.im p{position:absolute;left:0;right:0;bottom:0;background:#000a;max-height:50%}
 .bt{border-collapse:collapse;font-size:12px}.bt th{font:9px var(--px);color:var(--cy);padding:3px}.bt td{padding:0}.bt input{width:112px;height:26px;border-radius:0;border:1px solid #3a3260;font-size:12px}
+.bh{flex-wrap:wrap}.sc.sb{padding:0}.rg{display:flex;gap:8px;align-items:center}.rg input{flex:1;padding:0;border:0;background:none}.rg b{width:18px;color:var(--yl);font-weight:400}
+.big{flex:none;width:min(calc(100% - 16px),calc(var(--bg) * var(--ar,1.333)));aspect-ratio:4/3;margin:8px auto;position:relative;background:#000;border:2px solid var(--vi);display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;box-shadow:inset 0 0 30px #000}.big img{object-fit:contain}
 </style></head><body>
 <div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="cfg">⚙</button></header>
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
 <script>
-const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v4';
+const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v5';
 const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ---- auth / REST (독서앱과 동일 방식) ---- */
@@ -88,7 +89,7 @@ const idbGet=async k=>{try{const d=await idb();return await new Promise(s=>{cons
 const idbSet=async(k,v)=>{try{const d=await idb();await new Promise(s=>{const t=d.transaction('f','readwrite');t.objectStore('f').put(v,k);t.oncomplete=s;t.onerror=s})}catch(e){}};
 function send(sh,row,del,quiet){if(!row.id)row.id=nid();const a=D[sh],i=a.findIndex(r=>r.id==row.id);del?(i>=0&&a.splice(i,1)):i>=0?(a[i]=row):a.push(row);wq.push({sh,row:{...row},del});pumpW();idbSet('data:'+ME.id,D);if(!quiet)render()}
 async function pumpW(){if(wbusy)return;wbusy=true;while(wq.length){const j=wq[0];let ok=false,er;for(let t=0;t<3&&!ok;t++){try{j.del?await rest(`${TB[j.sh]}?id=eq.${j.row.id}`,{method:'DELETE'}):await rest(`${TB[j.sh]}?on_conflict=id`,{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(toDB(j.sh,j.row))});ok=true}catch(e){er=e;if(t<2)await new Promise(r=>setTimeout(r,700*(t+1)))}}wq.shift();if(!ok){wfail.push(j);$('#msg').innerHTML=`<div class="err">Save failed (${E(er.message)}). Only on this screen. <button class="btn" data-a="retry">Retry</button></div>`}}wbusy=false}
-addEventListener('beforeunload',e=>{if(wq.length||wbusy){e.preventDefault();e.returnValue=''}});
+addEventListener('beforeunload',e=>{if(wq.length||wbusy||(ed&&ed.up>0)){e.preventDefault();e.returnValue=''}});
 /* ---- 이미지: 키만 저장, 토큰 붙여 불러와 기기에 캐시 ---- */
 const mediaUrl=u=>!u||/^https?:/.test(u)?u:`${MEDIA}/o/${u}`,img=(u,sm)=>{u=String(u||'');if(sm)u=u.replace(/\.jpg$/,'_s.jpg');return mediaUrl(u)};
 const IC=new Map(),Q=[];let busy=0;
@@ -126,7 +127,7 @@ const byDate=(a,b)=>String(b.date).localeCompare(String(a.date));
 const thumbOf=p=>{const l=D.MP.filter(x=>x.people==p.id&&x.thumb).sort((a,b)=>byDate(mv(a.movie),mv(b.movie)))[0];return l?l.thumb:p.thumb};
 function scenes(m){const d=m.countdown?-1:1;return D.Scene.filter(s=>s.movie==m.id).sort((x,y)=>d*((x.time_input||0)-(y.time_input||0)))}
 /* ---- 폼 정의 ---- */
-const FS={Movie:[[['poster','poster','img','poster']],[['name','title','t']],[['sort','type','s',SORTS],['genre','genre','t']],[['release','release','d'],['date','watched','d']],[['runtime','runtime','tm'],['countdown','display','s',[['','countup'],['1','countdown']]]],[['platform','platform','t'],['star','star','st']],[['review','review','a']]],
+const FS={Movie:[[['poster','poster','img','poster']],[['name','title','t'],['release','release','d']],[['sort','type','s',SORTS],['genre','genre','t']],[['date','watched','d'],['platform','platform','t']],[['runtime','runtime','tm'],['countdown','display','s',[['','countup'],['1','countdown']]]],[['star','star','sl']],[['review','review','a']]],
 People:[[['thumb','photo','pick']],[['name','name','t']],[['sort','roles','m',PS]],[['nation','nation','t']],[['birth','born','d'],['death','died','d']],[['memo','memo','a']]],
 Scene:[[['image','photo','img','scene']],[['time_input','time','tm']],[['actor','actors','ac']],[['line','line','a']],[['memo','memo','a']]]};
 const tfh=s=>{s=+s;const p=n=>String(n).padStart(2,'0');return p(Math.floor(s/3600))+':'+p(Math.floor(s%3600/60))+':'+p(s%60)};
@@ -138,6 +139,7 @@ if(t=='img')return`<div class="cell full"><div class="pst ${o} imgp" data-pick="
 if(t=='pick'){const mp=D.MP.filter(x=>x.people==r.id);let L=mp.filter(x=>x.thumb).map(x=>x.thumb);if(!L.length)L=mp.map(x=>mv(x.movie).poster).filter(Boolean);if(!L.length)L=D.Movie.map(x=>x.poster).filter(Boolean);L=[...new Set(L)];
 return`<div class="cell full" style="text-align:center"><div class="pst person imgp" id="pv-${k}"><span class="phl">${l}</span>${IM(v)}</div><div class="cands chips">${L.map(x=>`<div class="cd ${x==v?'on':''}" data-pk="${x}">${IM(x,1)}</div>`).join('')||'<span class="mut">No cast photos or posters yet</span>'}</div></div>`}
 if(t=='t')h=`<input ${n} value="${E(v)}" ${k=='genre'?'list=dl-g':k=='platform'?'list=dl-p':k=='nation'?'list=dl-n':''}>`;
+else if(t=='sl')h=`<div class="rg"><input ${n} type="range" min="1" max="10" step="1" value="${v||5}"><b>${v||5}</b></div>`;
 else if(t=='st')h=`<input ${n} type="number" min="1" max="10" step="1" value="${E(v)}">`;
 else if(t=='d')h=`<div class="dt"><input ${n} inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10" value="${E(String(v).slice(0,10))}"><button type="button" class="cal" data-a="cal">📅</button><input type="date" class="pk" tabindex="-1"></div>`;
 else if(t=='tm')h=`<input ${n} inputmode="numeric" placeholder="00:00:00" value="${v===''||v==null?'':tfh(v)}">`;
@@ -154,9 +156,9 @@ function newP(){const n=(prompt('New person name')||'').trim();if(!n)return'';co
 function openForm(sh,row,def){cfg=false;bk=null;ed={sh,isNew:!row,up:0,row:row?{...row}:{id:nid(),...(sh=='Movie'?{c1:'#2a2a3a',c2:'#ff2e97',c3:'#25e8ff',star:''}:{}),...def}};ed.mp=sh=='Movie'?D.MP.filter(x=>x.movie==ed.row.id).map(x=>({...x})):[];render()}
 const rf=()=>{ed.row=collect();render()};
 function formB(){const{sh,row}=ed,t={Movie:'MOVIE',People:'PERSON',Scene:'SCENE'}[sh],R=g=>`<div class="rw" style="--n:${g.length}">${g.map(f=>fld(f,row)).join('')}</div>`,sp=sh!='Scene',rows=FS[sh].slice(sp?1:0).map(R);
-if(sh=='Movie')rows.splice(rows.length-1,0,crewHtml());
+if(sh=='Movie')rows.splice(2,0,crewHtml());
 const body=sp?`<div class="sp"><div class="sl ${sh=='People'?'sq':''}">${R(FS[sh][0])}</div><div class="sr">${rows.join('')}</div></div>`:rows.join('');
-return`<div class="bh">${t} ${ed.isNew?'NEW':'EDIT'}<i></i><button class="btn" data-a="save">Save</button><button class="btn" data-a="cancel">Cancel</button>${ed.isNew?'':'<button class="btn pk" data-a="del">Delete</button>'}</div><div class="sc"><form id="f" onsubmit="return false">${body}${sh=='Movie'?castHtml():''}</form>
+return`<div class="bh">${t} ${ed.isNew?'NEW':'EDIT'}<i></i><button class="btn" data-a="save">Save</button><button class="btn" data-a="cancel">Cancel</button>${ed.isNew?'':'<button class="btn pk" data-a="del">Delete</button>'}</div><div class="sc"><form id="f" onsubmit="return false">${body}${sh=='Movie'?castHtml():''}</form>${ed.isNew?'':'<button class="btn pk" data-a="del" style="margin-top:12px">Delete</button>'}
 <datalist id="dl-g">${[...new Set(D.Movie.flatMap(m=>String(m.genre).split(/[,\/]\s*/)).filter(Boolean))].map(x=>`<option>${E(x)}`).join('')}</datalist><datalist id="dl-p">${[...new Set(D.Movie.map(m=>m.platform).filter(Boolean))].map(x=>`<option>${E(x)}`).join('')}</datalist><datalist id="dl-n">${[...new Set(D.People.map(m=>m.nation).filter(Boolean))].map(x=>`<option>${E(x)}`).join('')}</datalist></div>`}
 function collect(){const{sh,row}=ed,f=$('#f'),r={...row};for(const[k,,t]of FS[sh].flat()){if(t=='img'||t=='pick')continue;const e=f.elements[k];if(t=='m'||t=='ac')r[k]=[...f.querySelectorAll(`[data-m=${k}]:checked`)].map(c=>c.value);else if(t=='tm')r[k]=tp_(hms(e.value,1));else if(t=='d')r[k]=nd(e.value);else r[k]=e.value}return r}
 function saveForm(){const{sh}=ed,r=collect();if(sh=='Movie'&&!r.name.trim()){alert('Title is required');return}
@@ -184,22 +186,24 @@ el.innerHTML=items.slice(p*n,p*n+n).map(mk).join('')||'<span class="mut" style="
 const b=[...$('#T').querySelectorAll('.pb')];b[0].disabled=p<=0;b[1].disabled=p>=pc-1;hydrate()}
 const hs=t=>[...String(t)].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7),tape=m=>{const h=Math.abs(hs(m.id)),c=[m.c1||'#2a2a3a',m.c2||'#ff2e97',m.c3||'#25e8ff'],o=h%3,v=(h>>3)%4,A=c[o],B=c[(o+1)%3],C=c[(o+2)%3],P=['#18181b','#30343a','#8e9298','#3c4c5c'][(h>>6)%4],[sk,t,l]=[[B,lum(B),C],['#efe8cf','#1d1d1d',B],['#f6f3e6','#111',C],[A,lum(A),B]][v];return`<div class="tp d${v} ${S.Movie==m.id?'on':''}" data-a="sel" data-k="Movie" data-id="${m.id}" style="--a:${A};--b:${B};--p:${P};--s:${sk};--t:${t};--l:${l}"><i class="cp"></i><div class="sk"><span class="st" style="font-size:min(14px,calc(var(--sl)/${Math.max(1,[...m.name].reduce((a,c)=>a+(/[\x00-\x7f]/.test(c)?.55:1),0))}))">${E(m.name)}</span><b class="lg">VHS</b></div></div>`};
 const pcard=p=>`<div class="pc ${S.People==p.id?'on':''}" data-a="sel" data-k="People" data-id="${p.id}"><div class="ph">${E([...p.name][0]||'?')}${IM(thumbOf(p),1)}</div><span>${E(p.name)}</span></div>`;
-function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.4)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');return Math.round(th/5.4)}
+function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.4)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');r.setProperty('--bg',Math.max(120,Math.min(640,innerHeight-th-110)-160)+'px');return Math.round(th/5.4)}
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&!ed&&!bk&&render(),200)});
 function render(){const c0=$('#tabs');c0.innerHTML=['Movie','People','Scene'].map(t=>`<button class="tab ${t==tab?'on':''}" data-a="tab" data-t="${t}">${t.toUpperCase()}</button>`).join('');
 const mvs=[...D.Movie].sort(byDate),ppl=[...D.People].sort((a,b)=>a.name.localeCompare(b.name,'ko')),isP=tab=='People';
 $('#T').innerHTML=shelf();fillShelf(isP?ppl:mvs,isP?66:sizes(),isP?pcard:tape,isP?'People':'Movie');
-$('#B').innerHTML=ed?formB():bk?bulkHtml():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(cfg)loadUF();if(tab=='Scene')hd()}
+$('#B').innerHTML=ed?formB():bk?bulkHtml():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(cfg)loadUF();if(tab=='Scene')hd()}
 const bar=(t,b)=>`<div class="bh">${t}<i></i>${b}</div>`;
+const crewLine=m=>{const o=Object.entries(CREW).map(([k,e])=>{const n=cast(m.id).filter(x=>x.sort==k).map(x=>E(pp(x.people).name));return n.length?`<b>${e}</b> ${n.join(', ')}`:''}).filter(Boolean);return o.length?`<div class="l">${o.join(' / ')}</div>`:''};
 function movB(){const m=mv(S.Movie),nb='<button class="btn" data-a="new" data-s="Movie">+ Movie</button>';if(!m.id)return bar('MOVIE',nb)+'<div class="sc c mut">Pick a tape above</div>';
-return bar('NOW PLAYING','<button class="btn" data-a="edit" data-s="Movie">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl"><div class="pst">${IM(m.poster)}</div></div><div class="sr"><h2>${E(m.name)}</h2><div class="l"><b>${E(m.sort)}</b> · ${E(m.genre)} · ${m.runtime?tfh(m.runtime)+(m.countdown?' ▼':' ▲'):''}</div><div class="l">release ${E(m.release)} · watched ${E(m.date)}</div><div class="l">${E(m.platform)} · ${stars(m.star)}</div>${staff(m)}${m.review?`<div class="rv">${E(m.review)}</div>`:''}</div></div><h4>CAST</h4>${actors(m.id).map(x=>`<div class="l">${E(pp(x.people).name)} ${x.role?'· '+E(x.role):''}</div>`).join('')||'<div class="mut">No cast yet — add it from Edit</div>'}</div>`}
+return bar('NOW PLAYING','<button class="btn" data-a="edit" data-s="Movie">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl"><div class="pst">${IM(m.poster)}</div></div><div class="sr"><h2>${E(m.name)}${m.release?` (${E(String(m.release).slice(0,4))})`:''}</h2><div class="l"><b>type</b> ${E(m.sort)}</div><div class="l"><b>genre</b> ${E(m.genre)}</div>${crewLine(m)}</div></div>
+<div class="l"><b>watched</b> ${E(m.date)} / <b>platform</b> ${E(m.platform)}</div><div class="l"><b>runtime</b> ${m.runtime?tfh(m.runtime):''} / <b>display</b> ${m.countdown?'countdown':'countup'}</div><div class="l">${stars(m.star)}</div>${m.review?`<div class="rv">${E(m.review)}</div>`:''}<h4>CAST</h4>${actors(m.id).map(x=>`<div class="l">${E(pp(x.people).name)} ${x.role?'· '+E(x.role):''}</div>`).join('')||'<div class="mut">No cast yet — add it from Edit</div>'}</div>`}
 function peoB(){const p=pp(S.People),nb='<button class="btn" data-a="new" data-s="People">+ Person</button>';if(!p.id)return bar('PEOPLE',nb)+'<div class="sc c mut">Pick a card above</div>';
-return bar('PROFILE','<button class="btn" data-a="edit" data-s="People">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl sq"><div class="pst person">${IM(thumbOf(p))}</div></div><div class="sr"><h2>${E(p.name)}</h2><div class="l"><b>${E((p.sort||[]).join('/'))}</b> · ${E(p.nation)}</div><div class="l">${E(p.birth)}${p.death?' ~ '+E(p.death):''}</div>${p.memo?`<div class="rv">${E(p.memo)}</div>`:''}</div></div><h4>FILMOGRAPHY</h4>${D.MP.filter(x=>x.people==p.id).sort((a,b)=>byDate(mv(a.movie),mv(b.movie))).map(x=>`<div class="l">${E(mv(x.movie).date).slice(0,4)} <b>${E(mv(x.movie).name)}</b> · ${E(x.sort)} ${E(x.role)}</div>`).join('')||'<div class="mut">-</div>'}</div>`}
+return bar('PROFILE','<button class="btn" data-a="edit" data-s="People">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl sq"><div class="pst person">${IM(thumbOf(p))}</div></div><div class="sr"><h2>${E(p.name)}</h2><div class="l"><b>roles</b> ${E((p.sort||[]).join(', '))}</div><div class="l"><b>nation</b> ${E(p.nation)}</div><div class="l"><b>born</b> ${E(p.birth)} / <b>died</b> ${E(p.death)}</div>${p.memo?`<div class="rv">${E(p.memo)}</div>`:''}</div></div><h4>FILMOGRAPHY</h4>${D.MP.filter(x=>x.people==p.id).sort((a,b)=>byDate(mv(a.movie),mv(b.movie))).map(x=>`<div class="l">${E(mv(x.movie).date).slice(0,4)} <b>${E(mv(x.movie).name)}</b> · ${E(x.sort)} ${E(x.role)}</div>`).join('')||'<div class="mut">-</div>'}</div>`}
 function scnB(){const m=mv(S.Movie);if(!m.id)return bar('SCENES','')+'<div class="sc c mut">Pick a movie above</div>';const a=scenes(m),s=a.find(x=>x.id==S.sc)||a[0];if(s)S.sc=s.id;
 const fr=a.map(x=>`<div class="fr ${s&&x.id==s.id?'on':''}" data-id="${x.id}">${x.image?IM(x.image,1):E([...x.line].slice(0,4).join(''))+'<br>'+E([...x.line].slice(4,8).join(''))+([...x.line].length>8?'…':'')}<small>${tf(x.time_input)}</small></div>`).join('');
 const L=s&&s.line||'',fz=L.length<20?22:L.length<60?17:13;
 return bar(E(m.name).slice(0,16),'<button class="btn" data-a="edit" data-s="Scene">Edit</button><button class="btn" data-a="new" data-s="Scene">+ Scene</button>')+`<div class="strip" id="strip">${fr||'<span class="mut">No scenes yet</span>'}</div>
-${s?`<div class="big ${s.image?'im':''}" id="big"><span class="cap">${tf(s.time_input)} ${(s.actor||[]).map(i=>E(pp(i).name)).join(', ')}</span>${IM(s.image)}${L?`<p style="font-size:${fz}px">${E(L)}</p>`:''}</div>${s.memo?`<div class="mut" style="padding:0 10px 6px">${E(s.memo)}</div>`:''}`:''}`}
+<div class="sc sb">${s?`<div class="big ${s.image?'im':''}" id="big"><span class="cap">${tf(s.time_input)} ${(s.actor||[]).map(i=>E(pp(i).name)).join(', ')}</span>${IM(s.image)}${L?`<p style="font-size:${fz}px">${E(L)}</p>`:''}</div>${s.memo?`<div class="mut" style="padding:0 10px 6px">${E(s.memo)}</div>`:''}`:''}</div>`}
 /* PC: 연결한 로컬 폴더에 원본이 있으면 고화질로 교체 */
 async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.local||!dirH)return;try{if(await dirH.queryPermission({mode:'read'})!='granted')return;const f=await(await dirH.getFileHandle(s.local)).getFile(),u=URL.createObjectURL(f),i=$('#big img');if(i)i.src=u}catch(e){}}
 /* ---- 설정 ---- */
@@ -215,7 +219,7 @@ async function loadUF(){if(!MEDIA||UF.length)return;try{UF=(await(await fetch(ME
 const LF={};async function userFont(n){const fam='U_'+n.replace(/[^\w가-힣]/g,'_');if(LF[n])return fam;let b=await idbGet('f_'+n);if(!b){await loadUF();const f=UF.find(x=>x.name==n);if(!f)throw new Error('font not found');b=await(await fetch(f.url,{headers:{Authorization:'Bearer '+await token()}})).arrayBuffer();await idbSet('f_'+n,b)}const ff=new FontFace(fam,b);await ff.load();document.fonts.add(ff);LF[n]=1;return fam}
 async function applyFont(r,v){const f=v.startsWith('u:')?await userFont(v.slice(2)):v.slice(2),q=/^(sans-serif|serif|monospace)$/.test(f)?f:`'${f}'`;document.documentElement.style.setProperty('--'+r,q+(r=='ui'?',sans-serif':',sans-serif'))}
 /* ---- 이벤트 ---- */
-document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;if(ed&&ed.up>0&&['tab','sel','cfg','cancel','new','edit','bulk','save','del'].includes(a)){$('#msg').innerHTML='<div class="err">Uploading… please wait until it finishes.</div>';setTimeout(()=>$('#msg').innerHTML='',1800);return}
 if(a=='tab'){tab=t.dataset.t;ed=null;cfg=false;bk=null;pg._m=0;render()}
 else if(a=='pg'){pg[tab]+=+t.dataset.d;pg._m=1;render();pg._m=0}
 else if(a=='sel'){S[t.dataset.k]=t.dataset.id;S.sc=null;ed=null;cfg=false;bk=null;pg._m=1;render();pg._m=0}
@@ -238,11 +242,11 @@ else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('pass
 document.addEventListener('change',async e=>{const t=e.target;if(t.name=='people'){t.parentNode.querySelector('[name=newp]').style.display=t.value=='__new'?'':'none'}if(t.dataset.up)upImg(t.files[0],t.dataset.up,t.dataset.n,t.dataset.r?ed.mp.find(x=>x.id==t.dataset.r):null,t.dataset.pv);
 if(t.id=='s-fui'||t.id=='s-fse'){const r=t.id=='s-fui'?'ui':'se';try{localStorage.setItem('mvmv_f'+r,t.value)}catch(x){}try{await applyFont(r,t.value)}catch(x){alert('Font failed: '+x.message)}}});
 document.addEventListener('click',e=>{const f=e.target.closest('.fr');if(f){S.sc=f.dataset.id;render()}});
-document.addEventListener('load',e=>{const i=e.target;if(i.tagName=='IMG'&&i.closest('.big'))i.style.objectFit=i.naturalWidth/i.naturalHeight>16/9?'cover':'contain'},true);
+document.addEventListener('load',e=>{const i=e.target;if(i.tagName=='IMG'&&i.closest('.big')){const r=i.naturalWidth/i.naturalHeight,b=i.closest('.big'),q=Math.min(16/9,Math.max(4/3,r));b.style.aspectRatio=q;b.style.setProperty('--ar',q);i.style.objectFit=r>16/9?'cover':'contain'}},true);
 document.addEventListener('click',e=>{const q=e.target.closest('[data-pickmp]');if(q){$('#fi-mp-'+q.dataset.pickmp).click();return}const p=e.target.closest('[data-pick]');if(p){$('#fi-'+p.dataset.pick).click();return}
 const k=e.target.closest('[data-pk]');if(k&&ed){ed.row.thumb=k.dataset.pk;document.querySelectorAll('[data-pk]').forEach(x=>x.classList.toggle('on',x==k));$('#pv-thumb').innerHTML='<span class="phl">photo</span>'+IM(ed.row.thumb);hydrate();return}
 const d=e.target.closest('input[type=date]');if(d&&d.showPicker)try{d.showPicker()}catch(x){}});
-document.addEventListener('input',e=>{const t=e.target;if(t.closest&&t.closest('.dt')&&!t.classList.contains('pk'))t.value=dfmt(t.value);if(t.name=='runtime'||t.name=='time_input')t.value=hms(t.value)});
+document.addEventListener('input',e=>{const t=e.target;if(t.type=='range'&&t.nextElementSibling)t.nextElementSibling.textContent=t.value;if(t.closest&&t.closest('.dt')&&!t.classList.contains('pk'))t.value=dfmt(t.value);if(t.name=='runtime'||t.name=='time_input')t.value=hms(t.value)});
 document.addEventListener('change',e=>{const t=e.target;if(t.classList&&t.classList.contains('pk')){t.closest('.dt').querySelector('input:not(.pk)').value=t.value;return}
 if(t.name=='runtime'||t.name=='time_input'){t.value=hms(t.value,1);return}
 if(t.id=='bsh'){syncBk();bk={sh:t.value,rows:blank()};render();return}
