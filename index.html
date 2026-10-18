@@ -41,7 +41,7 @@ label{display:block;font-size:11px;color:var(--cy);margin-top:7px}input,select,t
 .sk{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--s);border:1px solid #0007;box-shadow:inset 0 0 5px #0004,inset 6px 0 6px -6px #fff8;overflow:hidden}
 .st{flex:1;min-height:0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font:bold 13px var(--se);color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:3px 0}
 .lg{flex:none;height:15px;background:var(--l);color:#fff;font:bold 6px/15px var(--px);text-align:center}
-.tp.d1 .sk{border-top:6px solid var(--a)}.tp.d2 .sk{border-left:3px solid var(--a);border-right:3px solid var(--b)}.tp.d3 .sk{background:linear-gradient(90deg,#fff3,#0000 45%,#0003),var(--s)}
+.tp.d1 .sk{border-top:6px solid var(--a)}.tp.d2 .sk{box-shadow:inset 0 6px 0 var(--a),inset 0 9px 0 var(--s),inset 0 12px 0 var(--b)}.tp.d3 .sk{background:linear-gradient(90deg,#fff3,#0000 45%,#0003),var(--s)}
 @media(min-width:760px){.sc{padding:8px 24px}.bh{padding:5px 20px}.strip{padding:14px 20px}}
 .rw{display:grid;grid-template-columns:repeat(var(--n,1),minmax(0,1fr));gap:6px 10px;margin-top:6px}
 .cell{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:4px}.cell.full{display:block}.cell.ta{align-items:start}.ct{min-width:0}
@@ -60,21 +60,22 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 .er{display:grid;grid-template-columns:44px 92px 96px minmax(0,1fr) 16px;gap:4px;margin-top:4px;align-items:center}.er input{width:100%;height:30px}.er b{color:var(--pk);cursor:pointer;text-align:center}.bt td.mut{white-space:nowrap}
 @media(max-width:520px){.er{grid-template-columns:44px minmax(0,1fr) minmax(0,1fr) 16px}.er input:nth-child(4){grid-column:1/-1}.er b{grid-column:4;grid-row:1}}
 #bm{position:fixed;inset:0;z-index:103;background:#000c;display:flex;align-items:center;justify-content:center;padding:2vh 2vw}.bmp{width:100%;height:100%;max-width:1700px;background:#100f1c;border:2px solid var(--cy);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}.bmp .sc{flex:1}.bt th{position:sticky;top:0;background:#100f1c;z-index:1;text-align:left}
-.tp{width:var(--tw);height:var(--th);flex:none;position:relative;background:linear-gradient(90deg,#fff3,#0000 14%,#0000 84%,#0006),var(--p);border-radius:2px;border:1.5px solid #000;box-shadow:inset 0 0 0 1px #ffffff22,0 3px 4px #000a;cursor:pointer;transition:.15s}
-.tp::before{content:'';position:absolute;left:0;right:0;top:15%;height:2px;background:#0008;box-shadow:0 1px 0 #fff3}
-.tp::after{content:'';position:absolute;left:0;right:0;bottom:2.4%;height:2px;background:#0007;box-shadow:0 1px 0 #fff2}
-.sm{position:absolute;left:50%;top:0;height:15%;width:2px;margin-left:-1px;background:#000a;box-shadow:1px 0 0 #fff3}
-.nt{position:absolute;right:3px;top:calc(var(--th)*.03);width:41%;height:calc(var(--th)*.07);background:#0008;border:1px solid #000;border-radius:1px;box-shadow:inset 0 2px 2px #000,0 1px 0 #fff3}
-.rc{position:absolute;left:2px;right:2px;top:17%;bottom:4.6%;display:flex;padding:2px;background:#0003;border:1px solid #000;border-radius:3px;box-shadow:inset 0 2px 3px #000c,0 1px 0 #fff3}
+.tp{width:var(--tw);height:var(--th);flex:none;position:relative;background:linear-gradient(90deg,#fff3,#0000 14%,#0000 84%,#0006),var(--p);border-radius:2px;border:1px solid #000c;box-shadow:inset 0 0 0 1px #ffffff22,0 3px 4px #000a;cursor:pointer;transition:.15s}
+.tp::before{content:'';position:absolute;left:0;right:0;top:12.8%;height:1px;background:#000a;box-shadow:0 1px 0 #fff3}
+.tp::after{content:'';position:absolute;left:0;right:0;bottom:2.4%;height:1px;background:#0009;box-shadow:0 1px 0 #fff2}
+.sm{position:absolute;left:50%;top:0;height:12.8%;width:1px;margin-left:-.5px;background:#000b;box-shadow:1px 0 0 #fff3}
+.rc{position:absolute;left:2px;right:2px;top:14.5%;bottom:4.6%;display:flex;padding:2px;background:#0002;border:1px solid #0009;border-radius:3px;box-shadow:inset 0 1px 2px #000a,0 1px 0 #ffffff33}
 .rc .sk{flex:1;min-width:0}
 .tp.on{transform:translateY(-8px);box-shadow:inset 0 0 0 1px #ffffff22,0 8px 8px #000d}
+.nt{position:absolute;right:3px;top:calc(var(--th)*.055);width:41%;height:calc(var(--th)*.065);border:1px solid #000b;border-radius:1px;box-shadow:0 1px 0 #ffffff40,inset 0 1px 0 #ffffff24}
+.tp.d2 .st{padding-top:14px}.tcy{text-combine-upright:all}
 </style></head><body>
 <div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="cfg">⚙</button></header>
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/media.js"></script>
 <script>
-const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v9';
+const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v11';
 const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
 if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
 Media.init({worker:MEDIA,getToken:token});
@@ -109,10 +110,10 @@ const hydrate=()=>{};   // 이미지는 <img src>로 바로 불러와서 따로 
 const IM=k=>k?Media.img(k,'onerror="this.remove()"'):'';
 /* 업로드: 공용 모듈(media.js) — 세로 200px WebP 한 장. DB에는 해시만 저장. 장면은 원본도 보관(PC 폴더 또는 서버 inbox) */
 function palette(im){const N=48,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');x.drawImage(im,0,0,N,N);const d=x.getImageData(0,0,N,N).data,B={};for(let i=0;i<d.length;i+=4){const k=(d[i]>>5)+','+(d[i+1]>>5)+','+(d[i+2]>>5),b=B[k]=B[k]||[0,0,0,0];b[0]++;b[1]+=d[i];b[2]+=d[i+1];b[3]+=d[i+2]}
-const sat=c=>{const m=Math.max(...c);return m?(m-Math.min(...c))/m:0},L=Object.values(B).map(b=>({n:b[0],c:[b[1]/b[0],b[2]/b[0],b[3]/b[0]].map(Math.round)})),dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]),lv=c=>lm(rgb(c)),W=[...L].sort((a,b)=>b.n*(.3+sat(b.c))-a.n*(.3+sat(a.c))),p=[W[0].c],far=(o,t)=>p.every(q=>dist(q,o.c)>t);
+const sat=c=>{const m=Math.max(...c);return m?(m-Math.min(...c))/m:0},L=Object.values(B).map(b=>({n:b[0],c:[b[1]/b[0],b[2]/b[0],b[3]/b[0]].map(Math.round)})),skin=c=>{const[r,g,b]=c.map(v=>v/255),mx=Math.max(r,g,b),d=mx-Math.min(r,g,b);if(!d)return false;let h=mx==r?((g-b)/d)%6:mx==g?(b-r)/d+2:(r-g)/d+4;h=(h*60+360)%360;const sa=d/mx;return(h<=50&&sa>=.12&&sa<=.72&&mx>=.3)||(h>=345&&sa<=.4&&mx>=.5)},nS=L.filter(o=>!skin(o.c)),LL=nS.reduce((a,o)=>a+o.n,0)>=N*N*.15?nS:L,dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]),lv=c=>lm(rgb(c)),W=[...LL].sort((a,b)=>b.n*(.3+sat(b.c))-a.n*(.3+sat(a.c))),p=[W[0].c],far=(o,t)=>p.every(q=>dist(q,o.c)>t);
 const s2=W.find(o=>far(o,70));p.push(s2?s2.c:[255,46,151]);
-const ac=[...L].filter(o=>far(o,60)).sort((a,b)=>sat(b.c)*Math.sqrt(b.n)-sat(a.c)*Math.sqrt(a.n))[0];p.push(ac?ac.c:[37,232,255]);
-const ex=L.filter(o=>o.n>=N*N*.02&&far(o,50)).sort((a,b)=>lv(a.c)-lv(b.c)),w=lv(p[0])>.35?ex[0]:ex[ex.length-1];p.push(w?w.c:(lv(p[0])>.35?[21,21,27]:[241,236,220]));
+const ac=[...LL].filter(o=>far(o,60)).sort((a,b)=>sat(b.c)*Math.sqrt(b.n)-sat(a.c)*Math.sqrt(a.n))[0];p.push(ac?ac.c:[37,232,255]);
+const ex=LL.filter(o=>o.n>=N*N*.02&&far(o,50)).sort((a,b)=>lv(a.c)-lv(b.c)),w=lv(p[0])>.35?ex[0]:ex[ex.length-1];p.push(w?w.c:(lv(p[0])>.35?[21,21,27]:[241,236,220]));
 return p.map(c=>rgb(c))}
 async function recolor(){const L=D.Movie.filter(m=>m.poster);let n=0;for(const m of L){$('#s-c').textContent=`${++n}/${L.length} ${m.name}`;try{const im=await new Promise((ok,no)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>ok(i);i.onerror=no;i.src=img(m.poster)}),[c1,c2,c3,c4]=palette(im);send('Movie',{...m,c1,c2,c3,c4},false,true)}catch(e){}}render();$('#s-c')&&($('#s-c').textContent='Done: '+L.length+' poster(s)')}
 let FN='';
@@ -225,9 +226,9 @@ body=neutral?['#18181b','#30343a','#8e9298','#3c4c5c'][(h>>8)%4]:pl[bi],rest=[0,
 l=pl[oth[(h>>13)%3]],a=pl[oth[(h>>15)%3]],b=pl[oth[(h>>17)%3]],v=(h>>3)%4,
 tc=[0,1,2,3].filter(i=>i!=si&&(neutral||i!=bi)).map(i=>pl[i]).sort((x,y)=>cr(y,sk)-cr(x,sk))[0],tx=(h>>19)%10>=3&&tc&&cr(tc,sk)>=3?tc:(cr(sk,'#111111')>=cr(sk,'#ffffff')?'#111':'#fff'),
 ch=[...String(m.name)],nm=ch.slice(0,8).join('')+(ch.length>8?'…':''),N=Math.max(1,[...nm].reduce((x,c)=>x+(/[\x00-\x7f]/.test(c)?.55:1),0));
-return`<div class="tp d${v} ${S.Movie==m.id?'on':''}" data-a="sel" data-k="Movie" data-id="${m.id}" style="--a:${a};--b:${b};--p:${body};--s:${sk};--t:${tx};--l:${l}"><i class="nt"></i><i class="sm"></i><div class="rc"><div class="sk"><span class="st" style="font-size:min(14px,calc(var(--sl)/${N}))">${E(nm)}</span><b class="lg">VHS</b></div></div></div>`};
+return`<div class="tp d${v} ${S.Movie==m.id?'on':''}" data-a="sel" data-k="Movie" data-id="${m.id}" style="--a:${a};--b:${b};--p:${body};--s:${sk};--t:${tx};--l:${l}"><i class="nt"></i><i class="sm"></i><div class="rc"><div class="sk"><span class="st" style="font-size:min(14px,calc(var(--sl)/${N}))">${E(nm).replace(/\d+/g,d=>d.length==1?`<span class="tcy">${d}</span>`:d)}</span><b class="lg">VHS</b></div></div></div>`};
 const pcard=p=>`<div class="pc ${S.People==p.id?'on':''}" data-a="sel" data-k="People" data-id="${p.id}"><div class="ph">${E([...p.name][0]||'?')}${IM(thumbOf(p),1)}</div><span>${E(p.name)}</span></div>`;
-function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.4)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');r.setProperty('--bgh',Math.max(120,Math.min(640,innerHeight-th-110)-160)+'px');return Math.round(th/5.4)}
+function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.8)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');r.setProperty('--bgh',Math.max(120,Math.min(640,innerHeight-th-110)-160)+'px');return Math.round(th/5.8)}
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&!ed&&!bk&&render(),200)});
 function render(){const c0=$('#tabs');c0.innerHTML=['Movie','People','Scene'].map(t=>`<button class="tab ${t==tab?'on':''}" data-a="tab" data-t="${t}">${t.toUpperCase()}</button>`).join('');
 const mvs=[...D.Movie].sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999'))),ppl=[...D.People].sort((a,b)=>a.name.localeCompare(b.name,'ko')),isP=tab=='People';
