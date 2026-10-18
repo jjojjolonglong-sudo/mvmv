@@ -72,9 +72,12 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 <div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="cfg">⚙</button></header>
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.js"></script>
 <script>
 const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v9';
 const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
+if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
+Media.init({worker:MEDIA,getToken:token});
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ---- auth / REST (독서앱과 동일 방식) ---- */
 const SES=()=>{try{return JSON.parse(localStorage.getItem('mvmv_sb')||'null')}catch(e){return null}},setSES=s=>{try{s?localStorage.setItem('mvmv_sb',JSON.stringify(s)):localStorage.removeItem('mvmv_sb')}catch(e){}};
@@ -101,31 +104,24 @@ function send(sh,row,del,quiet){if(!row.id)row.id=nid();const a=D[sh],i=a.findIn
 async function pumpW(){if(wbusy)return;wbusy=true;while(wq.length){const j=wq[0];let ok=false,er;for(let t=0;t<3&&!ok;t++){try{j.del?await rest(`${TB[j.sh]}?id=eq.${j.row.id}`,{method:'DELETE'}):await rest(`${TB[j.sh]}?on_conflict=id`,{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(toDB(j.sh,j.row))});ok=true}catch(e){er=e;if(t<2)await new Promise(r=>setTimeout(r,700*(t+1)))}}wq.shift();if(!ok){wfail.push(j);$('#msg').innerHTML=`<div class="err">Save failed (${E(er.message)}). Only on this screen. <button class="btn" data-a="retry">Retry</button></div>`}}wbusy=false}
 addEventListener('beforeunload',e=>{if(wq.length||wbusy||(ed&&ed.up>0)){e.preventDefault();e.returnValue=''}});
 /* ---- 이미지: 키만 저장, 토큰 붙여 불러와 기기에 캐시 ---- */
-const mediaUrl=u=>!u||/^https?:/.test(u)?u:`${MEDIA}/o/${u}`,img=(u,sm)=>{u=String(u||'');if(sm)u=u.replace(/\.jpg$/,'_s.jpg');return mediaUrl(u)};
-const IC=new Map(),Q=[];let busy=0;
-function want(u){if(IC.has(u))return;IC.set(u,0);Q.push(u);pump()}function pump(){while(busy<4&&Q.length){busy++;tryLoad(Q.shift(),0)}}
-async function fetchBlob(u){let c=null;try{c=await caches.open('mvmv-media')}catch(e){}let r=c&&await c.match(u);if(!r){r=await fetch(u,{headers:{Authorization:'Bearer '+await token()}});if(!r.ok)throw new Error(r.status);c&&c.put(u,r.clone())}return URL.createObjectURL(await r.blob())}
-function tryLoad(u,n){fetchBlob(u).catch(e=>/_s\.jpg$/.test(u)?fetchBlob(u.replace(/_s\.jpg$/,'.jpg')):Promise.reject(e)).then(b=>{IC.set(u,b);busy--;hydrate();pump()}).catch(e=>{if(n<2)setTimeout(()=>tryLoad(u,n+1),500*(n+1));else{IC.set(u,'bad');busy--;hydrate();pump()}})}
-function hydrate(){document.querySelectorAll('img[data-u]:not([src])').forEach(i=>{const v=IC.get(i.dataset.u);if(v==='bad')i.remove();else if(v)i.src=v;else want(i.dataset.u)})}
-const IM=(k,sm)=>{if(!k)return'';const u=img(k,sm),v=IC.get(u);return`<img data-u="${E(u)}" ${v&&v!=='bad'?`src="${E(v)}"`:''} alt="">`};
-/* 업로드: 용량 최소화(세로 기준 축소 + JPEG). 큰 파일/작은 파일 두 장 → Worker의 /upload (독서앱과 동일 규약) */
-const SZ={poster:[140,70,.72,0],person:[140,56,.72,1],scene:[300,100,.7,0]};
-const scaled=(im,h,q,sq)=>{const s=h/im.height,c=document.createElement('canvas'),x=c.getContext('2d');if(sq){const m=Math.min(im.width,im.height);c.width=c.height=Math.min(h,m);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,c.width,c.height)}else{const k=Math.min(1,s);c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);x.drawImage(im,0,0,c.width,c.height)}return new Promise(r=>c.toBlob(b=>r({blob:b,url:c.toDataURL('image/jpeg',q)}),'image/jpeg',q))};
+const img=k=>Media.url(k);
+const hydrate=()=>{};   // 이미지는 <img src>로 바로 불러와서 따로 할 일이 없어요
+const IM=k=>k?Media.img(k,'onerror="this.remove()"'):'';
+/* 업로드: 공용 모듈(media.js) — 세로 200px WebP 한 장. DB에는 해시만 저장. 장면은 원본도 보관(PC 폴더 또는 서버 inbox) */
 function palette(im){const N=48,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');x.drawImage(im,0,0,N,N);const d=x.getImageData(0,0,N,N).data,B={};for(let i=0;i<d.length;i+=4){const k=(d[i]>>5)+','+(d[i+1]>>5)+','+(d[i+2]>>5),b=B[k]=B[k]||[0,0,0,0];b[0]++;b[1]+=d[i];b[2]+=d[i+1];b[3]+=d[i+2]}
 const sat=c=>{const m=Math.max(...c);return m?(m-Math.min(...c))/m:0},L=Object.values(B).map(b=>({n:b[0],c:[b[1]/b[0],b[2]/b[0],b[3]/b[0]].map(Math.round)})),dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]),lv=c=>lm(rgb(c)),W=[...L].sort((a,b)=>b.n*(.3+sat(b.c))-a.n*(.3+sat(a.c))),p=[W[0].c],far=(o,t)=>p.every(q=>dist(q,o.c)>t);
 const s2=W.find(o=>far(o,70));p.push(s2?s2.c:[255,46,151]);
 const ac=[...L].filter(o=>far(o,60)).sort((a,b)=>sat(b.c)*Math.sqrt(b.n)-sat(a.c)*Math.sqrt(a.n))[0];p.push(ac?ac.c:[37,232,255]);
 const ex=L.filter(o=>o.n>=N*N*.02&&far(o,50)).sort((a,b)=>lv(a.c)-lv(b.c)),w=lv(p[0])>.35?ex[0]:ex[ex.length-1];p.push(w?w.c:(lv(p[0])>.35?[21,21,27]:[241,236,220]));
 return p.map(c=>rgb(c))}
-async function recolor(){const L=D.Movie.filter(m=>m.poster);let n=0;for(const m of L){$('#s-c').textContent=`${++n}/${L.length} ${m.name}`;try{const u=await fetchBlob(img(m.poster)),im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=u}),[c1,c2,c3,c4]=palette(im);send('Movie',{...m,c1,c2,c3,c4},false,true)}catch(e){}}render();$('#s-c')&&($('#s-c').textContent='Done: '+L.length+' poster(s)')}
-let dirH=null;const ext=f=>(f.name.match(/\.(\w+)$/)||[,'jpg'])[1].toLowerCase();
-function upImg(f,kind,name,tgt,pvid){if(!f||!ed)return;const tok=ed,[H,h2,q,sq]=SZ[kind],rd=new FileReader();
-rd.onload=()=>{const im=new Image();im.onload=async()=>{const m=await scaled(im,H,q,sq),t=await scaled(im,h2,q,sq),pv=$('#'+(pvid||'pv-'+name));pv.innerHTML=`<img src="${m.url}">`;
-if(kind=='poster')[ed.row.c1,ed.row.c2,ed.row.c3,ed.row.c4]=palette(im);
-if(!MEDIA){pv.textContent='no media server';return}
-ed.up++;ub();try{const fd=new FormData();fd.append('main',m.blob,'m.jpg');fd.append('thumb',t.blob,'t.jpg');const r=await fetch(MEDIA+'/upload',{method:'POST',headers:{Authorization:'Bearer '+await token()},body:fd}),j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||'HTTP '+r.status);(tgt||ed.row)[name]=j.key;
-if(kind=='scene'&&dirH){try{const fn=ed.row.id+'.'+ext(f),w=await(await dirH.getFileHandle(fn,{create:true})).createWritable();await w.write(f);await w.close();ed.row.local=fn}catch(e){$('#msg').innerHTML='<div class="err">Local save failed: '+E(e.message)+'</div>'}}}
-catch(x){pv.textContent='upload failed';$('#msg').innerHTML='<div class="err">Upload failed: '+E(x.message)+'</div>'}finally{if(ed===tok){ed.up--;ub()}}};im.src=rd.result};rd.readAsDataURL(f)}
+async function recolor(){const L=D.Movie.filter(m=>m.poster);let n=0;for(const m of L){$('#s-c').textContent=`${++n}/${L.length} ${m.name}`;try{const im=await new Promise((ok,no)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>ok(i);i.onerror=no;i.src=img(m.poster)}),[c1,c2,c3,c4]=palette(im);send('Movie',{...m,c1,c2,c3,c4},false,true)}catch(e){}}render();$('#s-c')&&($('#s-c').textContent='Done: '+L.length+' poster(s)')}
+let FN='';
+function upImg(f,kind,name,tgt,pvid){if(!f||!ed)return;const tok=ed,pv=$('#'+(pvid||'pv-'+name));ed.up++;ub();
+(async()=>{let p;try{p=await Media.process(f);pv.innerHTML=`<img src="${p.previewUrl}">`;
+if(kind=='poster')[tok.row.c1,tok.row.c2,tok.row.c3,tok.row.c4]=palette(p.bitmap);
+(tgt||tok.row)[name]=await Media.upload(p);
+if(kind=='scene'){try{const o=await Media.original(tok.row.id,f);tok.row.local=o=='local'?((await Media.folder.find(tok.row.id))||{}).name||'':''}catch(e){$('#msg').innerHTML='<div class="err">Original save failed: '+E(e.message)+'</div>'}}}
+catch(x){pv.textContent='upload failed';$('#msg').innerHTML='<div class="err">Upload failed: '+E(x.message)+'</div>'}finally{if(p&&p.bitmap.close)p.bitmap.close();if(ed===tok){ed.up--;ub()}}})()}
 const ub=()=>{const b=$('[data-a=save]');if(b){b.disabled=ed.up>0;b.textContent=ed.up?'Uploading…':'Save'}};
 /* ---- 헬퍼 ---- */
 const SORTS=['영화','연속극','옴니버스'],PS=['배우','감독','극본','제작'];
@@ -250,16 +246,16 @@ const L=s&&s.line||'',fz=L.length<20?22:L.length<60?17:13;
 return bar(E(m.name).slice(0,16),'<button class="btn" data-a="edit" data-s="Scene">Edit</button><button class="btn" data-a="new" data-s="Scene">+ Scene</button>')+`<div class="strip" id="strip">${fr||'<span class="mut">No scenes yet</span>'}</div>
 <div class="sc sb">${s?`<div class="big ${s.image?'im':''}" id="big"><span class="cap">${tcap(s)} ${(s.actor||[]).map(i=>E(pp(i).name)).join(', ')}</span>${IM(s.image)}${L?`<p style="font-size:${fz}px">${E(L)}</p>`:''}</div>${s.memo?`<div class="mut" style="padding:0 10px 6px">${E(s.memo)}</div>`:''}`:''}</div>`}
 /* PC: 연결한 로컬 폴더에 원본이 있으면 고화질로 교체 */
-async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.local||!dirH)return;try{if(await dirH.queryPermission({mode:'read'})!='granted')return;const f=await(await dirH.getFileHandle(s.local)).getFile(),u=URL.createObjectURL(f),i=$('#big img');if(i)i.src=u}catch(e){}}
+async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;try{const u=await Media.folder.fileUrl(s.id),i=$('#big img');if(u&&i)i.src=u}catch(e){}}
 /* ---- 설정 ---- */
 let UF=[],ufState='';const FB=['Gowun Dodum','Do Hyeon','Noto Sans KR','sans-serif','serif','monospace'];
 const fOpts=r=>{const c=LS('mvmv_f'+r)||'b:'+(r=='ui'?'Gowun Dodum':'Do Hyeon');return`<optgroup label="Built-in">${FB.map(f=>`<option value="b:${f}" ${c=='b:'+f?'selected':''}>${f}</option>`).join('')}</optgroup>${UF.length?`<optgroup label="My fonts">${UF.map(u=>`<option value="u:${E(u.name)}" ${c=='u:'+u.name?'selected':''}>${E(u.name)}</option>`).join('')}</optgroup>`:''}`};
 const cfgHtml=()=>bar('SETTINGS','<button class="btn" data-a="cfgsave">Save</button><button class="btn" data-a="cfgx">Close</button>')+`<div class="sc"><div class="mut">App ${VER}</div><label>Account</label><div>${E(ME&&ME.email)} <button class="btn" data-a="logout">Sign out</button></div><label>Media server (Worker URL)</label><input id="s-m" value="${E(MEDIA)}"><button class="btn" data-a="mtest">Test</button><pre id="s-t" class="mut" style="white-space:pre-wrap"></pre>
-<label>Local HD folder (PC · Chrome/Edge)</label><button class="btn" data-a="dir">${dirH?'Linked: '+E(dirH.name)+' (change)':'Link folder'}</button><div class="mut">Scene images are also saved there at original quality and shown in HD on this PC.</div>
+<label>Local HD folder (PC · Chrome/Edge)</label><button class="btn" data-a="dir">${FN?'Linked: '+E(FN)+' (change)':'Link folder'}</button><button class="btn" data-a="sync">Receive originals</button><div class="mut" id="s-sync"></div><div class="mut">Scene originals are saved there (PC) or kept on the server until a PC receives them. Shown in HD on this PC.</div>
 <label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button><label>Interface font</label><select id="s-fui">${fOpts('ui')}</select><label>Title font</label><select id="s-fse">${fOpts('se')}</select><div class="mut">${E(ufState)}</div><div style="margin-top:6px;font:var(--se);font-size:18px">가나다라마바사 ABC 123</div></div>`;
 async function mtest(){const o=[],say=t=>{o.push(t);$('#s-t').textContent=o.join('\n')};let H;try{H={headers:{Authorization:'Bearer '+await token()}}}catch(e){say('✗ '+e.message);return}
 try{const r=await fetch(MEDIA+'/',H),j=await r.json();say(`${j.bucket&&j.supabase?'✓':'✗'} Worker · R2 ${j.bucket?'ok':'NO'} · Supabase ${j.supabase?'ok':'NO'} · login ${j.auth||'?'}`)}catch(e){say('✗ '+e.message);return}
-const m=D.Movie.find(x=>x.poster);if(m)try{const r=await fetch(mediaUrl(m.poster),H);say(`${r.ok?'✓':'✗'} Poster ${m.poster}: HTTP ${r.status}`)}catch(e){say('✗ '+e.message)}say('Done.')}
+const m=D.Movie.find(x=>x.poster);if(m)try{const r=await fetch(Media.url(m.poster));say(`${r.ok?'✓':'✗'} Poster ${m.poster}: HTTP ${r.status}`)}catch(e){say('✗ '+e.message)}say('Done.')}
 async function loadUF(){if(!MEDIA||UF.length)return;try{UF=(await(await fetch(MEDIA+'/fonts',{headers:{Authorization:'Bearer '+await token()}})).json()).fonts||[];ufState=UF.length+' font file(s)'}catch(e){ufState='Font list failed: '+e.message}if(cfg&&$('#s-fui')){$('#s-fui').innerHTML=fOpts('ui');$('#s-fse').innerHTML=fOpts('se')}}
 const LF={};async function userFont(n){const fam='U_'+n.replace(/[^\w가-힣]/g,'_');if(LF[n])return fam;let b=await idbGet('f_'+n);if(!b){await loadUF();const f=UF.find(x=>x.name==n);if(!f)throw new Error('font not found');b=await(await fetch(f.url,{headers:{Authorization:'Bearer '+await token()}})).arrayBuffer();await idbSet('f_'+n,b)}const ff=new FontFace(fam,b);await ff.load();document.fonts.add(ff);LF[n]=1;return fam}
 async function applyFont(r,v){const f=v.startsWith('u:')?await userFont(v.slice(2)):v.slice(2),q=/^(sans-serif|serif|monospace)$/.test(f)?f:`'${f}'`;document.documentElement.style.setProperty('--'+r,q+(r=='ui'?',sans-serif':',sans-serif'))}
@@ -281,14 +277,15 @@ else if(a=='cal'){const d=t.closest('.dt'),k=d.querySelector('.dpk');k.value=nd(
 else if(a=='bulk'){cfg=false;bk={sh:'Movie',rows:blank(),ids:[]};render()}else if(a=='bload'){syncBk();loadBk();render()}else if(a=='epadd'){ed.ep.push({id:nid(),movie:ed.row.id,episode:Math.max(0,...ed.ep.map(x=>+x.episode||0))+1,runtime:'',watched:'',review:''});rf()}else if(a=='epdel'){ed.ep=ed.ep.filter(x=>x.id!=t.dataset.id);rf()}else if(a=='bclose'){bk=null;cfg=true;render()}else if(a=='badd'){syncBk();for(let i=0;i<10;i++)bk.rows.push([]);render()}else if(a=='bsave')bsave();
 else if(a=='recolor')recolor();
 else if(a=='mtest')mtest();
-else if(a=='dir'){try{dirH=await showDirectoryPicker({mode:'readwrite'});idbSet('dir',dirH);render()}catch(e){alert(e.message||'Not supported in this browser')}}
+else if(a=='dir'){try{await Media.folder.connect();FN=await Media.folder.name();render()}catch(e){if(e.name!='AbortError')alert(e.message||'Not supported in this browser')}}
+  else if(a=='sync'){const o=$('#s-sync');try{o.textContent='Receiving…';const r=await Media.sync({onProgress:p=>o.textContent=p.done+'/'+p.total});o.textContent=r.total?`Done: ${r.done}/${r.total}`+(r.failed.length?` · failed ${r.failed.length}`:''):'No originals waiting'}catch(e){o.textContent=e.message}}
 else if(a=='cfgsave'){const m=$('#s-m').value.trim().replace(/\/$/,'');try{localStorage.setItem('mvmv_media',m)}catch(e){}location.reload()}
 else if(a=='logout'){await logout();location.reload()}
 else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('password',{email:$('#em').value.trim(),password:$('#pw').value});start()}catch(x){$('#lgm').textContent=x.message}}});
 document.addEventListener('change',async e=>{const t=e.target;if(t.name=='people'){t.parentNode.querySelector('[name=newp]').style.display=t.value=='__new'?'':'none'}if(t.dataset.up)upImg(t.files[0],t.dataset.up,t.dataset.n,t.dataset.r?ed.mp.find(x=>x.id==t.dataset.r):null,t.dataset.pv);
 if(t.id=='s-fui'||t.id=='s-fse'){const r=t.id=='s-fui'?'ui':'se';try{localStorage.setItem('mvmv_f'+r,t.value)}catch(x){}try{await applyFont(r,t.value)}catch(x){alert('Font failed: '+x.message)}}});
-document.addEventListener('click',async e=>{const lb=e.target.closest('#lb');if(lb){lb.remove();return}const bg=e.target.closest('.big');if(bg){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;let u=IC.get(img(s.image));if(!u||u=='bad')u=null;
-if(s.local&&dirH)try{if(await dirH.queryPermission({mode:'read'})!='granted'&&await dirH.requestPermission({mode:'read'})!='granted')throw 0;u=URL.createObjectURL(await(await dirH.getFileHandle(s.local)).getFile())}catch(x){}
+document.addEventListener('click',async e=>{const lb=e.target.closest('#lb');if(lb){lb.remove();return}const bg=e.target.closest('.big');if(bg){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;let u=img(s.image);
+if(Media.folder.supported)try{if(await Media.folder.ensure())u=(await Media.folder.fileUrl(s.id))||u}catch(x){}
 if(u){const d=document.createElement('div');d.id='lb';d.innerHTML='<img src="'+u+'">';document.body.appendChild(d)}return}const f=e.target.closest('.fr');if(f){S.sc=f.dataset.id;render()}});
 document.addEventListener('load',e=>{const i=e.target;if(i.tagName=='IMG'&&i.closest('.big'))i.style.objectFit=i.naturalWidth/i.naturalHeight>=4/3?'cover':'contain'},true);
 document.addEventListener('click',e=>{const q=e.target.closest('[data-pickmp]');if(q){$('#fi-mp-'+q.dataset.pickmp).click();return}const p=e.target.closest('[data-pick]');if(p){$('#fi-'+p.dataset.pick).click();return}
@@ -303,7 +300,7 @@ if(t.dataset.addmp!==undefined&&t.value){let id=t.value;if(id=='__new')id=newP()
 else if(t.dataset.mp){const x=ed.mp.find(y=>y.id==t.dataset.id);if(!x)return;if(t.dataset.mp=='people'&&t.value=='__new'){const id=newP();if(id)x.people=id;rf()}else x[t.dataset.mp]=t.value}});
 /* ---- 시작 ---- */
 function showLogin(m){$('#lg').hidden=false;$('#lgm').textContent=m||''}
-async function start(){const s=SES();if(!s){showLogin();return}ME=s.user;dirH=await idbGet('dir');
+async function start(){const s=SES();if(!s){showLogin();return}ME=s.user;FN=await Media.folder.name().catch(()=>'');
 ['ui','se'].forEach(r=>{const v=LS('mvmv_f'+r);if(v)applyFont(r,v).catch(()=>{})});
 const c=await idbGet('data:'+ME.id);if(c&&c.Movie){D=c;D.Episode=D.Episode||[];$('#lg').hidden=true;render()}
 try{const ks=Object.keys(TB),rs=await Promise.all(ks.map(selAll)),j={};ks.forEach((k,i)=>j[k]=rs[i]);if(!wq.length&&!wbusy&&!ed&&!cfg&&!bk){D=j;idbSet('data:'+ME.id,j);$('#lg').hidden=true;render()}}
