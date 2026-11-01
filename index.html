@@ -73,10 +73,12 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 <div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="cfg">⚙</button></header>
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
-<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.js"></script>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/config.js"></script>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.v1.js"></script>
 <script>
-const SB='https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v11';
-const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
+const CFG=window.APP_CONFIG||{};   // 공용 설정(config.js). 못 불러와도(오프라인 등) 아래 값으로 동작해요
+const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v12';
+const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||CFG.MEDIA||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
 if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
 Media.init({worker:MEDIA,getToken:token});
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
