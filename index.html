@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MVMV</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0a0912"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MVMV"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MVMV</title><script src="https://jjojjolonglong-sudo.github.io/mnmn/fonts.v1.js" data-app="mvmv"></script><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0a0912"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MVMV"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Do+Hyeon&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0912;--pk:#ff2e97;--cy:#25e8ff;--yl:#ffe14a;--vi:#9a5cff;--ui:'Gowun Dodum',sans-serif;--se:'Do Hyeon','Gowun Dodum',sans-serif;--px:'Press Start 2P',monospace}
@@ -235,7 +235,7 @@ let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&!ed&
 function render(){const c0=$('#tabs');c0.innerHTML=['Movie','People','Scene'].map(t=>`<button class="tab ${t==tab?'on':''}" data-a="tab" data-t="${t}">${t.toUpperCase()}</button>`).join('');
 const mvs=[...D.Movie].sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999'))),ppl=[...D.People].sort((a,b)=>a.name.localeCompare(b.name,'ko')),isP=tab=='People';
 $('#T').innerHTML=shelf();fillShelf(isP?ppl:mvs,isP?66:sizes(),isP?pcard:tape,isP?'People':'Movie');
-$('#B').innerHTML=ed?formB():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(ed&&ed.sh=='Scene')tder();bulkModal();if(cfg)loadUF();}
+$('#B').innerHTML=ed?formB():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(ed&&ed.sh=='Scene')tder();bulkModal();}
 const bar=(t,b)=>`<div class="bh">${t}<i></i>${b}</div>`;
 const crewLine=m=>{const o=Object.entries(CREW).map(([k,e])=>{const n=cast(m.id).filter(x=>x.sort==k).map(x=>E(pp(x.people).name));return n.length?`<b>${e}</b> ${n.join(', ')}`:''}).filter(Boolean);return o.length?`<div class="l">${o.join(' / ')}</div>`:''};
 function movB(){const m=mv(S.Movie),nb='<button class="btn" data-a="new" data-s="Movie">+ Movie</button>';if(!m.id)return bar('MOVIE',nb)+'<div class="sc c mut">Pick a tape above</div>';
@@ -251,17 +251,12 @@ return bar(E(m.name).slice(0,16),'<button class="btn" data-a="edit" data-s="Scen
 /* PC: 연결한 로컬 폴더에 원본이 있으면 고화질로 교체 */
 async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;try{const u=await Media.folder.fileUrl(s.id),i=$('#big img');if(u&&i)i.src=u}catch(e){}}
 /* ---- 설정 ---- */
-let UF=[],ufState='';const FB=['Gowun Dodum','Do Hyeon','Noto Sans KR','sans-serif','serif','monospace'];
-const fOpts=r=>{const c=LS('mvmv_f'+r)||'b:'+(r=='ui'?'Gowun Dodum':'Do Hyeon');return`<optgroup label="Built-in">${FB.map(f=>`<option value="b:${f}" ${c=='b:'+f?'selected':''}>${f}</option>`).join('')}</optgroup>${UF.length?`<optgroup label="My fonts">${UF.map(u=>`<option value="u:${E(u.name)}" ${c=='u:'+u.name?'selected':''}>${E(u.name)}</option>`).join('')}</optgroup>`:''}`};
 const cfgHtml=()=>bar('SETTINGS','<button class="btn" data-a="cfgsave">Save</button><button class="btn" data-a="cfgx">Close</button>')+`<div class="sc"><div class="mut">App ${VER}</div><label>Account</label><div>${E(ME&&ME.email)} <button class="btn" data-a="logout">Sign out</button></div><label>Media server (Worker URL)</label><input id="s-m" value="${E(MEDIA)}"><button class="btn" data-a="mtest">Test</button><pre id="s-t" class="mut" style="white-space:pre-wrap"></pre>
 <label>Local HD folder (PC · Chrome/Edge)</label><button class="btn" data-a="dir">${FN?'Linked: '+E(FN)+' (change)':'Link folder'}</button><button class="btn" data-a="sync">Receive originals</button><div class="mut" id="s-sync"></div><div class="mut">Scene originals are saved there (PC) or kept on the server until a PC receives them. Shown in HD on this PC.</div>
-<label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button><label>Interface font</label><select id="s-fui">${fOpts('ui')}</select><label>Title font</label><select id="s-fse">${fOpts('se')}</select><div class="mut">${E(ufState)}</div><div style="margin-top:6px;font:var(--se);font-size:18px">가나다라마바사 ABC 123</div></div>`;
+<label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button><label>Fonts</label><div class="mut">Fonts are now set in mnmn (글꼴 tab) and apply to every app.</div></div>`;
 async function mtest(){const o=[],say=t=>{o.push(t);$('#s-t').textContent=o.join('\n')};let H;try{H={headers:{Authorization:'Bearer '+await token()}}}catch(e){say('✗ '+e.message);return}
 try{const r=await fetch(MEDIA+'/',H),j=await r.json();say(`${j.bucket&&j.supabase?'✓':'✗'} Worker · R2 ${j.bucket?'ok':'NO'} · Supabase ${j.supabase?'ok':'NO'} · login ${j.auth||'?'}`)}catch(e){say('✗ '+e.message);return}
 const m=D.Movie.find(x=>x.poster);if(m)try{const r=await fetch(Media.url(m.poster));say(`${r.ok?'✓':'✗'} Poster ${m.poster}: HTTP ${r.status}`)}catch(e){say('✗ '+e.message)}say('Done.')}
-async function loadUF(){if(!MEDIA||UF.length)return;try{UF=(await(await fetch(MEDIA+'/fonts',{headers:{Authorization:'Bearer '+await token()}})).json()).fonts||[];ufState=UF.length+' font file(s)'}catch(e){ufState='Font list failed: '+e.message}if(cfg&&$('#s-fui')){$('#s-fui').innerHTML=fOpts('ui');$('#s-fse').innerHTML=fOpts('se')}}
-const LF={};async function userFont(n){const fam='U_'+n.replace(/[^\w가-힣]/g,'_');if(LF[n])return fam;let b=await idbGet('f_'+n);if(!b){await loadUF();const f=UF.find(x=>x.name==n);if(!f)throw new Error('font not found');b=await(await fetch(f.url,{headers:{Authorization:'Bearer '+await token()}})).arrayBuffer();await idbSet('f_'+n,b)}const ff=new FontFace(fam,b);await ff.load();document.fonts.add(ff);LF[n]=1;return fam}
-async function applyFont(r,v){const f=v.startsWith('u:')?await userFont(v.slice(2)):v.slice(2),q=/^(sans-serif|serif|monospace)$/.test(f)?f:`'${f}'`;document.documentElement.style.setProperty('--'+r,q+(r=='ui'?',sans-serif':',sans-serif'))}
 /* ---- 이벤트 ---- */
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;if(ed&&ed.up>0&&['tab','sel','cfg','cancel','new','edit','bulk','save','del'].includes(a)){$('#msg').innerHTML='<div class="err">Uploading… please wait until it finishes.</div>';setTimeout(()=>$('#msg').innerHTML='',1800);return}
 if(a=='tab'){tab=t.dataset.t;ed=null;cfg=false;bk=null;pg._m=0;render()}
@@ -286,7 +281,7 @@ else if(a=='cfgsave'){const m=$('#s-m').value.trim().replace(/\/$/,'');try{local
 else if(a=='logout'){await logout();location.reload()}
 else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('password',{email:$('#em').value.trim(),password:$('#pw').value});start()}catch(x){$('#lgm').textContent=x.message}}});
 document.addEventListener('change',async e=>{const t=e.target;if(t.name=='people'){t.parentNode.querySelector('[name=newp]').style.display=t.value=='__new'?'':'none'}if(t.dataset.up)upImg(t.files[0],t.dataset.up,t.dataset.n,t.dataset.r?ed.mp.find(x=>x.id==t.dataset.r):null,t.dataset.pv);
-if(t.id=='s-fui'||t.id=='s-fse'){const r=t.id=='s-fui'?'ui':'se';try{localStorage.setItem('mvmv_f'+r,t.value)}catch(x){}try{await applyFont(r,t.value)}catch(x){alert('Font failed: '+x.message)}}});
+});
 document.addEventListener('click',async e=>{const lb=e.target.closest('#lb');if(lb){lb.remove();return}const bg=e.target.closest('.big');if(bg){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;let u=img(s.image);
 if(Media.folder.supported)try{if(await Media.folder.ensure())u=(await Media.folder.fileUrl(s.id))||u}catch(x){}
 if(u){const d=document.createElement('div');d.id='lb';d.innerHTML='<img src="'+u+'">';document.body.appendChild(d)}return}const f=e.target.closest('.fr');if(f){S.sc=f.dataset.id;render()}});
@@ -304,7 +299,6 @@ else if(t.dataset.mp){const x=ed.mp.find(y=>y.id==t.dataset.id);if(!x)return;if(
 /* ---- 시작 ---- */
 function showLogin(m){$('#lg').hidden=false;$('#lgm').textContent=m||''}
 async function start(){const s=SES();if(!s){showLogin();return}ME=s.user;FN=await Media.folder.name().catch(()=>'');
-['ui','se'].forEach(r=>{const v=LS('mvmv_f'+r);if(v)applyFont(r,v).catch(()=>{})});
 const c=await idbGet('data:'+ME.id);if(c&&c.Movie){D=c;D.Episode=D.Episode||[];$('#lg').hidden=true;render()}
 try{const ks=Object.keys(TB),rs=await Promise.all(ks.map(selAll)),j={};ks.forEach((k,i)=>j[k]=rs[i]);if(!wq.length&&!wbusy&&!ed&&!cfg&&!bk){D=j;idbSet('data:'+ME.id,j);$('#lg').hidden=true;render()}}
 catch(e){if(/refresh|jwt|expired|not signed/i.test(e.message)){await logout();showLogin('Session expired.')}else if(!D)showLogin('Could not load: '+e.message)}}
