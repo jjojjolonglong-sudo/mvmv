@@ -211,7 +211,9 @@ el.innerHTML=items.slice(p*n,p*n+n).map(mk).join('')||'<span class="mut" style="
 const b=[...$('#T').querySelectorAll('.pb')];b[0].disabled=p<=0;b[1].disabled=p>=pc-1;hydrate()}
 const hs=t=>[...String(t)].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7),hx=h=>{h=String(h||'#888888');if(h.length==4)h='#'+[...h.slice(1)].map(c=>c+c).join('');return[1,3,5].map(i=>parseInt(h.substr(i,2),16))},rgb=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join(''),mix=(h,t,k)=>rgb(hx(h).map((v,i)=>v+(t[i]-v)*k)),tint=(h,k)=>mix(h,[255,255,255],k),shade=(h,k)=>mix(h,[0,0,0],k),
 lm=h=>{const[r,g,b]=hx(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b},cr=(a,b)=>{const x=lm(a),y=lm(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
-const tape=m=>window.MvTape?MvTape.html(m,{on:S.Movie==m.id,attrs:`data-a="sel" data-k="Movie" data-id="${m.id}"`}):`<div class="pc" data-a="sel" data-k="Movie" data-id="${m.id}"><span>${E(m.name)}</span></div>`;
+/* 테이프 라벨용: 출연진 맨 위 배우의 썸네일(이 영화용 썸네일 → 없으면 인물 썸네일) */
+const topImg=m=>{const x=actors(m.id)[0];if(!x)return'';const h=x.thumb||pp(x.people).thumb;return h?Media.url(h):''};
+const tape=m=>window.MvTape?MvTape.html(m,{on:S.Movie==m.id,img:topImg(m),attrs:`data-a="sel" data-k="Movie" data-id="${m.id}"`}):`<div class="pc" data-a="sel" data-k="Movie" data-id="${m.id}"><span>${E(m.name)}</span></div>`;
 const pcard=p=>`<div class="pc ${S.People==p.id?'on':''}" data-a="sel" data-k="People" data-id="${p.id}"><div class="ph">${E([...p.name][0]||'?')}${IM(thumbOf(p),1)}</div><span>${E(p.name)}</span></div>`;
 function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.8)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');r.setProperty('--bgh',Math.max(120,Math.min(640,innerHeight-th-110)-160)+'px');return Math.round(th/5.8)}
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&!ed&&!bk&&render(),200)});
