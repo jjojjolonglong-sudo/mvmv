@@ -57,18 +57,18 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 @media(max-width:520px){.er{grid-template-columns:44px minmax(0,1fr) minmax(0,1fr) 16px}.er input:nth-child(4){grid-column:1/-1}.er b{grid-column:4;grid-row:1}}
 #bm{position:fixed;inset:0;z-index:103;background:#000c;display:flex;align-items:center;justify-content:center;padding:2vh 2vw}.bmp{width:100%;height:100%;max-width:1700px;background:#100f1c;border:2px solid var(--cy);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}.bmp .sc{flex:1}.bt th{position:sticky;top:0;background:#100f1c;z-index:1;text-align:left}
 </style></head><body>
-<div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="cfg">⚙</button></header>
+<div id="app"><header><span class="logo">MVMV</span><span id="tabs"></span><button class="gear" data-a="reload" title="새로고침">↻</button><button class="gear" data-a="cfg">⚙</button></header>
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/config.js"></script>
-<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.v1.js"></script>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.v2.js"></script>
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/mvtape.v1.js"></script>
 <script>
 const CFG=window.APP_CONFIG||{};   // 공용 설정(config.js). 못 불러와도(오프라인 등) 아래 값으로 동작해요
-const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v12';
+const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v13';
 const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||CFG.MEDIA||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
 if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
-Media.init({worker:MEDIA,getToken:token});
+Media.init({app:'mvmv',worker:MEDIA,getToken:token});
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ---- auth / REST (독서앱과 동일 방식) ---- */
 const SES=()=>{try{return JSON.parse(localStorage.getItem('mvmv_sb')||'null')}catch(e){return null}},setSES=s=>{try{s?localStorage.setItem('mvmv_sb',JSON.stringify(s)):localStorage.removeItem('mvmv_sb')}catch(e){}};
@@ -235,7 +235,7 @@ return bar(E(m.name).slice(0,16),'<button class="btn" data-a="edit" data-s="Scen
 async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;try{const u=await Media.folder.fileUrl(s.id),i=$('#big img');if(u&&i)i.src=u}catch(e){}}
 /* ---- 설정 ---- */
 const cfgHtml=()=>bar('SETTINGS','<button class="btn" data-a="cfgsave">Save</button><button class="btn" data-a="cfgx">Close</button>')+`<div class="sc"><div class="mut">App ${VER}</div><label>Account</label><div>${E(ME&&ME.email)} <button class="btn" data-a="logout">Sign out</button></div><label>Media server (Worker URL)</label><input id="s-m" value="${E(MEDIA)}"><button class="btn" data-a="mtest">Test</button><pre id="s-t" class="mut" style="white-space:pre-wrap"></pre>
-<label>Local HD folder (PC · Chrome/Edge)</label><button class="btn" data-a="dir">${FN?'Linked: '+E(FN)+' (change)':'Link folder'}</button><button class="btn" data-a="sync">Receive originals</button><div class="mut" id="s-sync"></div><div class="mut">Scene originals are saved there (PC) or kept on the server until a PC receives them. Shown in HD on this PC.</div>
+<label>Local HD folder</label><div class="mut">원본 폴더 지정과 원본 받기는 mnmn의 '원본 폴더' 탭에서 해요. (mvmv folder: ${FN?E(FN):'not linked'})</div>
 <label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button><label>Fonts</label><div class="mut">Fonts are now set in mnmn (글꼴 tab) and apply to every app.</div></div>`;
 async function mtest(){const o=[],say=t=>{o.push(t);$('#s-t').textContent=o.join('\n')};let H;try{H={headers:{Authorization:'Bearer '+await token()}}}catch(e){say('✗ '+e.message);return}
 try{const r=await fetch(MEDIA+'/',H),j=await r.json();say(`${j.bucket&&j.supabase?'✓':'✗'} Worker · R2 ${j.bucket?'ok':'NO'} · Supabase ${j.supabase?'ok':'NO'} · login ${j.auth||'?'}`)}catch(e){say('✗ '+e.message);return}
@@ -258,9 +258,8 @@ else if(a=='cal'){const d=t.closest('.dt'),k=d.querySelector('.dpk');k.value=nd(
 else if(a=='bulk'){cfg=false;bk={sh:'Movie',rows:blank(),ids:[]};render()}else if(a=='bload'){syncBk();loadBk();render()}else if(a=='epadd'){ed.ep.push({id:nid(),movie:ed.row.id,episode:Math.max(0,...ed.ep.map(x=>+x.episode||0))+1,runtime:'',watched:'',review:''});rf()}else if(a=='epdel'){ed.ep=ed.ep.filter(x=>x.id!=t.dataset.id);rf()}else if(a=='bclose'){bk=null;cfg=true;render()}else if(a=='badd'){syncBk();for(let i=0;i<10;i++)bk.rows.push([]);render()}else if(a=='bsave')bsave();
 else if(a=='recolor')recolor();
 else if(a=='mtest')mtest();
-else if(a=='dir'){try{await Media.folder.connect();FN=await Media.folder.name();render()}catch(e){if(e.name!='AbortError')alert(e.message||'Not supported in this browser')}}
-  else if(a=='sync'){const o=$('#s-sync');try{o.textContent='Receiving…';const r=await Media.sync({onProgress:p=>o.textContent=p.done+'/'+p.total});o.textContent=r.total?`Done: ${r.done}/${r.total}`+(r.failed.length?` · failed ${r.failed.length}`:''):'No originals waiting'}catch(e){o.textContent=e.message}}
 else if(a=='cfgsave'){const m=$('#s-m').value.trim().replace(/\/$/,'');try{localStorage.setItem('mvmv_media',m)}catch(e){}location.reload()}
+else if(a=='reload'){location.reload()}
 else if(a=='logout'){await logout();location.reload()}
 else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('password',{email:$('#em').value.trim(),password:$('#pw').value});start()}catch(x){$('#lgm').textContent=x.message}}});
 document.addEventListener('change',async e=>{const t=e.target;if(t.name=='people'){t.parentNode.querySelector('[name=newp]').style.display=t.value=='__new'?'':'none'}if(t.dataset.up)upImg(t.files[0],t.dataset.up,t.dataset.n,t.dataset.r?ed.mp.find(x=>x.id==t.dataset.r):null,t.dataset.pv);
