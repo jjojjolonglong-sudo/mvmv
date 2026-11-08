@@ -11,7 +11,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:98;ba
 #app{height:100%;display:flex;flex-direction:column;gap:6px;width:100%;max-width:750px;max-height:calc(var(--th) + 36px + 640px + 90px);margin:auto}
 header{display:flex;align-items:center;gap:8px;border:2px solid var(--vi);border-radius:8px;padding:5px 8px;background:linear-gradient(90deg,#2a1250,#10304a);box-shadow:0 0 12px #9a5cff66}
 .logo{font:12px var(--px);color:var(--yl);text-shadow:0 0 8px var(--pk);margin-right:auto}
-.tab,.gear{font:9px var(--px);color:var(--cy);background:none;border:0;padding:6px 4px;cursor:pointer}.tab.on{color:var(--yl);text-shadow:0 0 8px var(--yl);border-bottom:2px solid var(--pk)}.gear{font-size:16px}
+.tab,.gear{font:9px var(--px);color:var(--cy);background:none;border:0;padding:6px 4px;cursor:pointer}.tab{line-height:12px;padding:6px 4px 4px;border-bottom:2px solid transparent}.tab.on{color:var(--yl);text-shadow:0 0 8px var(--yl);border-bottom-color:var(--pk)}.gear{font-size:16px;line-height:1;height:24px;padding:0 3px;display:inline-flex;align-items:center;justify-content:center;position:relative;top:-2px}#tabs{margin-right:4px}.gear+.gear{margin-left:-6px}[data-a=cfg].gear{top:-1px}
 .pane{border:2px solid var(--cy);border-radius:8px;background:#100f1c;box-shadow:inset 0 0 20px #0008,0 0 10px #25e8ff44;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #T{flex:none;height:calc(var(--th) + 36px)}#B{flex:1;min-height:260px;max-height:640px}#msg:empty{display:none}
 .row{display:flex;flex:1;min-height:0;align-items:stretch}
@@ -69,8 +69,8 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/mvtape.v1.js"></script>
 <script>
 const CFG=window.APP_CONFIG||{};   // 공용 설정(config.js). 못 불러와도(오프라인 등) 아래 값으로 동작해요
-const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v14';
-const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||CFG.MEDIA||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
+const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v15';
+const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(CFG.MEDIA||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');   /* 이미지 서버 주소는 공용 config.js에서 */
 if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
 Media.init({app:'mvmv',worker:MEDIA,getToken:token});
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -256,12 +256,9 @@ return bar(E(m.name).slice(0,16),'<button class="btn" data-a="edit" data-s="Scen
 /* PC: 연결한 로컬 폴더에 원본이 있으면 고화질로 교체 */
 async function hd(){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;try{const u=await Media.folder.fileUrl(s.id),i=$('#big img');if(u&&i)i.src=u}catch(e){}}
 /* ---- 설정 ---- */
-const cfgHtml=()=>bar('SETTINGS','<button class="btn" data-a="cfgsave">Save</button><button class="btn" data-a="cfgx">Close</button>')+`<div class="sc"><div class="mut">App ${VER}</div><label>Account</label><div>${E(ME&&ME.email)} <button class="btn" data-a="logout">Sign out</button></div><label>Media server (Worker URL)</label><input id="s-m" value="${E(MEDIA)}"><button class="btn" data-a="mtest">Test</button><pre id="s-t" class="mut" style="white-space:pre-wrap"></pre>
-<label>Local HD folder</label><div class="mut">원본 폴더 지정과 원본 받기는 mnmn의 '원본 폴더' 탭에서 해요. (mvmv folder: ${FN?E(FN):'not linked'})</div>
-<label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button><label>Fonts</label><div class="mut">Fonts are now set in mnmn (글꼴 tab) and apply to every app.</div></div>`;
-async function mtest(){const o=[],say=t=>{o.push(t);$('#s-t').textContent=o.join('\n')};let H;try{H={headers:{Authorization:'Bearer '+await token()}}}catch(e){say('✗ '+e.message);return}
-try{const r=await fetch(MEDIA+'/',H),j=await r.json();say(`${j.bucket&&j.supabase?'✓':'✗'} Worker · R2 ${j.bucket?'ok':'NO'} · Supabase ${j.supabase?'ok':'NO'} · login ${j.auth||'?'}`)}catch(e){say('✗ '+e.message);return}
-const m=D.Movie.find(x=>x.poster);if(m)try{const r=await fetch(Media.url(m.poster));say(`${r.ok?'✓':'✗'} Poster ${m.poster}: HTTP ${r.status}`)}catch(e){say('✗ '+e.message)}say('Done.')}
+const cfgHtml=()=>bar('SETTINGS','<button class="btn" data-a="cfgx">Close</button>')+`<div class="sc"><div class="mut">App ${VER}</div><label>Account</label><div>${E(ME&&ME.email)} <button class="btn" data-a="logout">Sign out</button></div>
+<label>Video colors</label><button class="btn" data-a="recolor">Re-extract from all posters</button><div id="s-c" class="mut"></div><label>Bulk entry</label><button class="btn" data-a="bulk">Open table entry</button>
+<h4>MANAGED IN MNMN</h4><label>Original images</label><div class="mut">원본 폴더 지정과 원본 받기는 mnmn '원본 폴더' 탭에서 해요.</div><label>Fonts</label><div class="mut">글꼴은 mnmn '글꼴' 탭에서 정하고 모든 앱에 같이 적용돼요.</div></div>`;
 /* ---- 이벤트 ---- */
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;if(ed&&ed.up>0&&['tab','sel','cfg','cancel','new','edit','bulk','save','del'].includes(a)){$('#msg').innerHTML='<div class="err">Uploading… please wait until it finishes.</div>';setTimeout(()=>$('#msg').innerHTML='',1800);return}
 if(a=='tab'){tab=t.dataset.t;ed=null;cfg=false;bk=null;pg._m=0;render()}
@@ -280,8 +277,6 @@ else if(a=='mpdel'){ed.mp=ed.mp.filter(x=>x.id!=t.dataset.id);rf()}
 else if(a=='cal'){const d=t.closest('.dt'),k=d.querySelector('.dpk');k.value=nd(d.querySelector('input:not(.dpk)').value);try{k.showPicker()}catch(x){k.click()}}
 else if(a=='bulk'){cfg=false;bk={sh:'Movie',rows:blank(),ids:[]};render()}else if(a=='bload'){syncBk();loadBk();render()}else if(a=='epadd'){ed.ep.push({id:nid(),movie:ed.row.id,episode:Math.max(0,...ed.ep.map(x=>+x.episode||0))+1,runtime:'',watched:'',review:''});rf()}else if(a=='epdel'){ed.ep=ed.ep.filter(x=>x.id!=t.dataset.id);rf()}else if(a=='bclose'){bk=null;cfg=true;render()}else if(a=='badd'){syncBk();for(let i=0;i<10;i++)bk.rows.push([]);render()}else if(a=='bsave')bsave();
 else if(a=='recolor')recolor();
-else if(a=='mtest')mtest();
-else if(a=='cfgsave'){const m=$('#s-m').value.trim().replace(/\/$/,'');try{localStorage.setItem('mvmv_media',m)}catch(e){}location.reload()}
 else if(a=='reload'){location.reload()}
 else if(a=='logout'){await logout();location.reload()}
 else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('password',{email:$('#em').value.trim(),password:$('#pw').value});start()}catch(x){$('#lgm').textContent=x.message}}});
