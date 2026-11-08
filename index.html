@@ -25,6 +25,10 @@ img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .sc{flex:1;overflow:auto;padding:8px 10px;min-height:0}
 .c{text-align:center}.pst{position:relative;width:93px;height:140px;margin:2px auto 4px;background:#222;border:1px solid #fff4;box-shadow:0 0 12px #25e8ff55}.pst.sq{width:140px;border-radius:4px}
 h2{font:22px var(--se);color:#fff;text-shadow:0 0 8px var(--vi)}h4{font:9px var(--px);color:var(--pk);margin:10px 0 4px;display:flex;justify-content:space-between}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px 12px}.cst{display:flex;gap:8px;align-items:center;min-width:0;cursor:pointer}.cst .ph{width:38px;height:38px;flex:none;position:relative;overflow:hidden;border:1px solid var(--pk);background:#222;display:flex;align-items:center;justify-content:center;font:15px var(--se);color:var(--cy)}.cst>div:last-child{min-width:0}.cst b{display:block;font-weight:400;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cst small{display:block;color:#cfcaf0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cst:hover b{color:var(--yl)}
+.mstrip{margin:0;min-height:0;padding:10px}.mstrip .fr{cursor:default}
+#T{position:relative}.psrch{position:absolute;top:6px;right:10px;z-index:101;width:min(170px,45%);font:12px var(--se);background:#0b0a16;color:#fff;border:1px solid var(--pk);border-radius:4px;padding:3px 8px}
+.shelf.two{display:grid;grid-template-columns:repeat(var(--c),var(--ps));grid-auto-rows:max-content;justify-content:center;align-content:center;gap:6px 8px;padding-top:30px}.shelf.two .pc{width:var(--ps);align-self:start}.shelf.two .pc .ph{width:var(--ps);height:var(--ps)}
 .l{font-size:13px;margin:3px 0;color:#cfcaf0}.l b{color:var(--yl);font-weight:400}.rv{white-space:pre-wrap;margin-top:6px;border-left:3px solid var(--pk);padding-left:8px}.mut{color:#8a86a8;font-size:12px}
 .st5{color:var(--yl);letter-spacing:1px}.err{background:#5a1030;border:1px solid var(--pk);padding:5px 8px;margin:4px;font-size:12px}
 label{display:block;font-size:11px;color:var(--cy);margin-top:7px}input,select,textarea{width:100%;font:inherit;background:#07060f;color:#fff;border:1px solid #5b4b8a;border-radius:3px;padding:5px}textarea{min-height:64px}.ck{display:inline-flex;gap:3px;align-items:center;margin:2px 8px 2px 0;color:#fff;font-size:13px}.ck input{width:auto}
@@ -65,7 +69,7 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/mvtape.v1.js"></script>
 <script>
 const CFG=window.APP_CONFIG||{};   // 공용 설정(config.js). 못 불러와도(오프라인 등) 아래 값으로 동작해요
-const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v13';
+const SB=CFG.SB||'https://rtvvajhsnwkkrmncyfbs.supabase.co',ANON=CFG.ANON||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dnZhamhzbndra3JtbmN5ZmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjkwMTEsImV4cCI6MjEwNzA0NTAxMX0.O2aLLeazv_FhUhbVAkp4vz3pw8GPb_683dUu7Et1Cwk',VER='mvmv-v14';
 const LS=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},MEDIA=(LS('mvmv_media')||CFG.MEDIA||'https://media.jjojjolonglong.workers.dev').replace(/\/$/,'');
 if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.randomUUID(),folder:{supported:false,name:async()=>''},process:async()=>{throw new Error('media.js could not be loaded')},upload:async()=>{throw new Error('media.js could not be loaded')},save:async()=>{throw new Error('media.js could not be loaded')}};
 Media.init({app:'mvmv',worker:MEDIA,getToken:token});
@@ -205,9 +209,11 @@ const keep=bk.rows.map((_,i)=>i).filter(i=>!ok.includes(i));bk.ids=keep.map(i=>b
 document.addEventListener('paste',e=>{const t=e.target;if(!bk||!t.dataset||t.dataset.c===undefined)return;const tx=e.clipboardData.getData('text');if(!/[\t\n]/.test(tx.trim()))return;e.preventDefault();syncBk();const r0=+t.dataset.r,c0=+t.dataset.c;tx.replace(/\r/g,'').replace(/\n+$/,'').split('\n').forEach((l,i)=>{while(bk.rows.length<=r0+i)bk.rows.push([]);l.split('\t').forEach((v,j)=>{if(c0+j<BK[bk.sh].length)bk.rows[r0+i][c0+j]=v.trim()})});render()});
 /* ---- 렌더 ---- */
 function shelf(items,w,mk,key){return`<div class="row"><button class="pb" data-a="pg" data-d="-1">◀</button><div class="shelf" data-w="${w}"></div><button class="pb" data-a="pg" data-d="1">▶</button></div>`}
-function fillShelf(items,w,mk,key){const el=$('#T .shelf');if(!el)return;const n=Math.max(1,Math.floor((el.clientWidth-8+3)/(w+3))),pc=Math.max(1,Math.ceil(items.length/n));let p=pg[tab]=Math.min(pg[tab],pc-1);
+function fillShelf(items,w,mk,key){const el=$('#T .shelf');if(!el)return;let n;
+if(key=='People'){/* 인물: 두 줄. 카드 크기는 영역 높이에 맞춰요 */const ps=Math.round(Math.max(40,Math.min(66,(el.clientHeight-30-8-6)/2-22))),c=Math.max(1,Math.floor((el.clientWidth-8+4)/(ps+8)));el.classList.add('two');el.style.setProperty('--ps',ps+'px');el.style.setProperty('--c',c);n=c*2}
+else n=Math.max(1,Math.floor((el.clientWidth-8+3)/(w+3)));const pc=Math.max(1,Math.ceil(items.length/n));let p=pg[tab]=Math.min(pg[tab],pc-1);
 if(S[key]&&!el.dataset.k){const i=items.findIndex(x=>x.id==S[key]);if(i>=0&&Math.floor(i/n)!=p&&!pg._m)p=pg[tab]=Math.floor(i/n)}
-el.innerHTML=items.slice(p*n,p*n+n).map(mk).join('')||'<span class="mut" style="padding:20px">Nothing yet — tap + below</span>';
+el.innerHTML=items.slice(p*n,p*n+n).map(mk).join('')||`<span class="mut" style="padding:20px;grid-column:1/-1">${key=='People'&&S.pq?'No match':'Nothing yet — tap + below'}</span>`;
 const b=[...$('#T').querySelectorAll('.pb')];b[0].disabled=p<=0;b[1].disabled=p>=pc-1;hydrate()}
 const hs=t=>[...String(t)].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7),hx=h=>{h=String(h||'#888888');if(h.length==4)h='#'+[...h.slice(1)].map(c=>c+c).join('');return[1,3,5].map(i=>parseInt(h.substr(i,2),16))},rgb=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join(''),mix=(h,t,k)=>rgb(hx(h).map((v,i)=>v+(t[i]-v)*k)),tint=(h,k)=>mix(h,[255,255,255],k),shade=(h,k)=>mix(h,[0,0,0],k),
 lm=h=>{const[r,g,b]=hx(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b},cr=(a,b)=>{const x=lm(a),y=lm(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
@@ -217,17 +223,31 @@ const tape=m=>window.MvTape?MvTape.html(m,{on:S.Movie==m.id,img:topImg(m),attrs:
 const pcard=p=>`<div class="pc ${S.People==p.id?'on':''}" data-a="sel" data-k="People" data-id="${p.id}"><div class="ph">${E([...p.name][0]||'?')}${IM(thumbOf(p),1)}</div><span>${E(p.name)}</span></div>`;
 function sizes(){const th=Math.round(Math.max(130,Math.min(200,innerHeight*.24))),r=document.documentElement.style;r.setProperty('--th',th+'px');r.setProperty('--tw',Math.round(th/5.8)+'px');r.setProperty('--sl',Math.round(th*.62)+'px');r.setProperty('--bgh',Math.max(120,Math.min(640,innerHeight-th-110)-160)+'px');return Math.round(th/5.8)}
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&!ed&&!bk&&render(),200)});
+/* 인물 목록: 이름순, 검색어(이름·국적·출연 작품명)로 거르기 */
+const pplList=()=>{const q=String(S.pq||'').trim().toLowerCase(),L=[...D.People].sort((a,b)=>a.name.localeCompare(b.name,'ko'));if(!q)return L;
+return L.filter(p=>[p.name,p.nation,...D.MP.filter(x=>x.people==p.id).map(x=>mv(x.movie).name)].some(v=>String(v||'').toLowerCase().includes(q)))};
 function render(){const c0=$('#tabs');c0.innerHTML=['Movie','People','Scene'].map(t=>`<button class="tab ${t==tab?'on':''}" data-a="tab" data-t="${t}">${t.toUpperCase()}</button>`).join('');
-const mvs=[...D.Movie].sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999'))),ppl=[...D.People].sort((a,b)=>a.name.localeCompare(b.name,'ko')),isP=tab=='People';
-$('#T').innerHTML=shelf();fillShelf(isP?ppl:mvs,isP?66:sizes(),isP?pcard:tape,isP?'People':'Movie');
+const mvs=[...D.Movie].sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999'))),ppl=pplList(),isP=tab=='People';
+$('#T').innerHTML=shelf()+(isP?`<input class="psrch" id="pq" placeholder="이름·국적·작품" value="${E(S.pq||'')}" autocomplete="off">`:'');fillShelf(isP?ppl:mvs,isP?66:sizes(),isP?pcard:tape,isP?'People':'Movie');
 $('#B').innerHTML=ed?formB():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(ed&&ed.sh=='Scene')tder();bulkModal();}
 const bar=(t,b)=>`<div class="bh">${t}<i></i>${b}</div>`;
 const crewLine=m=>{const o=Object.entries(CREW).map(([k,e])=>{const n=cast(m.id).filter(x=>x.sort==k).map(x=>E(pp(x.people).name));return n.length?`<b>${e}</b> ${n.join(', ')}`:''}).filter(Boolean);return o.length?`<div class="l">${o.join(' / ')}</div>`:''};
+/* 영화 상세: 포스터 옆 = 제목~runtime / 그 아래 REVIEW → CAST(사진+이름+역할, 넓으면 두 줄씩) → EPISODES(시리즈) → SCENE(필름롤, 누르면 장면 탭) */
+const castCard=x=>{const p=pp(x.people),h=x.thumb||p.thumb;return`<div class="cst" data-a="goP" data-id="${x.people}"><div class="ph">${E([...(p.name||'?')][0])}${IM(h)}</div><div><b>${E(p.name)}</b><small>${x.role?E(x.role)+' 역':'&nbsp;'}</small></div></div>`};
 function movB(){const m=mv(S.Movie),nb='<button class="btn" data-a="new" data-s="Movie">+ Movie</button>';if(!m.id)return bar('MOVIE',nb)+'<div class="sc c mut">Pick a tape above</div>';
+const sc=scenes(m),fr=sc.map(x=>`<div class="fr nf">${x.image?IM(x.image,1):E([...x.line].slice(0,4).join(''))+'<br>'+E([...x.line].slice(4,8).join(''))+([...x.line].length>8?'…':'')}<small>${tdisp(x,m)}</small></div>`).join('');
 return bar('NOW PLAYING','<button class="btn" data-a="edit" data-s="Movie">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl"><div class="pst">${IM(m.poster)}</div></div><div class="sr"><h2>${E(m.name)}${m.release?` (${E(String(m.release).slice(0,4))})`:''}</h2><div class="l"><b>type</b> ${E(m.sort)}</div><div class="l"><b>genre</b> ${E(m.genre)}</div>${crewLine(m)}
-<div class="l"><b>watched</b> ${E(m.date)} / <b>platform</b> ${E(m.platform)}</div><div class="l"><b>runtime</b> ${m.runtime?tfh(m.runtime):''} / <b>display</b> ${m.countdown?'countdown':'countup'}</div><div class="l">${stars(m.star)}</div>${m.review?`<div class="rv">${E(m.review)}</div>`:''}<h4>CAST</h4>${actors(m.id).map(x=>`<div class="l">${E(pp(x.people).name)} ${x.role?'· '+E(x.role):''}</div>`).join('')||'<div class="mut">No cast yet — add it from Edit</div>'}${isSeries(m)?`<h4>EPISODES</h4>${D.Episode.filter(x=>x.movie==m.id).sort((a,b)=>a.episode-b.episode).map(x=>`<div class="l"><b>ep ${x.episode}</b> ${nn(x.runtime)?tfh(x.runtime):''} ${E(x.watched)} ${E(x.review)}</div>`).join('')||'<div class="mut">No episodes — add them from Edit</div>'}`:''}</div></div></div>`}
+<div class="l"><b>watched</b> ${E(m.date)} / <b>platform</b> ${E(m.platform)}</div><div class="l"><b>runtime</b> ${m.runtime?tfh(m.runtime):''}</div></div></div>
+<h4>REVIEW</h4><div class="l">${stars(m.star)}</div>${m.review?`<div class="rv">${E(m.review)}</div>`:''}
+<h4>CAST</h4>${actors(m.id).length?`<div class="cg">${actors(m.id).map(castCard).join('')}</div>`:'<div class="mut">No cast yet — add it from Edit</div>'}
+${isSeries(m)?`<h4>EPISODES</h4>${D.Episode.filter(x=>x.movie==m.id).sort((a,b)=>a.episode-b.episode).map(x=>`<div class="l"><b>ep ${x.episode}</b> ${nn(x.runtime)?tfh(x.runtime):''} ${E(x.watched)} ${E(x.review)}</div>`).join('')||'<div class="mut">No episodes — add them from Edit</div>'}`:''}
+<h4>SCENE</h4>${fr?`<div class="strip mstrip">${fr}</div>`:'<div class="mut">No scenes yet</div>'}</div>`}
+/* 이 배우가 나오는 장면 필름롤 (영화 관람순 → 장면 순서) */
+const frm=(x,m)=>`<div class="fr nf">${x.image?IM(x.image,1):E([...x.line].slice(0,4).join(''))+'<br>'+E([...x.line].slice(4,8).join(''))+([...x.line].length>8?'…':'')}<small>${tdisp(x,m)}</small></div>`;
+const pfr=p=>{const ms=D.Movie.filter(m=>D.Scene.some(x=>x.movie==m.id&&(x.actor||[]).includes(p.id))).sort(byDate),h=ms.map(m=>scenes(m).filter(x=>(x.actor||[]).includes(p.id)).map(x=>frm(x,m)).join('')).join('');return h?`<div class="strip mstrip">${h}</div>`:'<div class="mut">No scenes yet</div>'};
 function peoB(){const p=pp(S.People),nb='<button class="btn" data-a="new" data-s="People">+ Person</button>';if(!p.id)return bar('PEOPLE',nb)+'<div class="sc c mut">Pick a card above</div>';
-return bar('PROFILE','<button class="btn" data-a="edit" data-s="People">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl sq"><div class="pst person">${IM(thumbOf(p))}</div></div><div class="sr"><h2>${E(p.name)}</h2><div class="l"><b>roles</b> ${E((p.sort||[]).join(', '))}</div><div class="l"><b>nation</b> ${E(p.nation)}</div><div class="l"><b>born</b> ${E(p.birth)} / <b>died</b> ${E(p.death)}</div>${p.memo?`<div class="rv">${E(p.memo)}</div>`:''}<h4>FILMOGRAPHY</h4>${D.MP.filter(x=>x.people==p.id).sort((a,b)=>byDate(mv(a.movie),mv(b.movie))).map(x=>`<div class="l">${E(mv(x.movie).date).slice(0,4)} <b>${E(mv(x.movie).name)}</b> · ${E(x.sort)} ${E(x.role)}</div>`).join('')||'<div class="mut">-</div>'}</div></div>`}
+return bar('PROFILE','<button class="btn" data-a="edit" data-s="People">Edit</button>'+nb)+`<div class="sc"><div class="sp"><div class="sl sq"><div class="pst person">${IM(thumbOf(p))}</div></div><div class="sr"><h2>${E(p.name)}</h2><div class="l"><b>roles</b> ${E((p.sort||[]).join(', '))}</div><div class="l"><b>nation</b> ${E(p.nation)}</div><div class="l"><b>born</b> ${E(p.birth)} / <b>died</b> ${E(p.death)}</div>${p.memo?`<div class="rv">${E(p.memo)}</div>`:''}<h4>FILMOGRAPHY</h4>${D.MP.filter(x=>x.people==p.id).sort((a,b)=>byDate(mv(a.movie),mv(b.movie))).map(x=>`<div class="l">${E(mv(x.movie).date).slice(0,4)} <b>${E(mv(x.movie).name)}</b> · ${E(x.sort)} ${E(x.role)}</div>`).join('')||'<div class="mut">-</div>'}</div></div>
+<h4>SCENE</h4>${pfr(p)}</div>`}
 function scnB(){const m=mv(S.Movie);if(!m.id)return bar('SCENES','')+'<div class="sc c mut">Pick a movie above</div>';const a=scenes(m),s=a.find(x=>x.id==S.sc)||a[0];if(s)S.sc=s.id;
 const fr=a.map(x=>`<div class="fr ${s&&x.id==s.id?'on':''}" data-id="${x.id}">${x.image?IM(x.image,1):E([...x.line].slice(0,4).join(''))+'<br>'+E([...x.line].slice(4,8).join(''))+([...x.line].length>8?'…':'')}<small>${tdisp(x,m)}</small></div>`).join('');
 const L=s&&s.line||'',fz=L.length<20?22:L.length<60?17:13;
@@ -245,6 +265,7 @@ const m=D.Movie.find(x=>x.poster);if(m)try{const r=await fetch(Media.url(m.poste
 /* ---- 이벤트 ---- */
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;if(ed&&ed.up>0&&['tab','sel','cfg','cancel','new','edit','bulk','save','del'].includes(a)){$('#msg').innerHTML='<div class="err">Uploading… please wait until it finishes.</div>';setTimeout(()=>$('#msg').innerHTML='',1800);return}
 if(a=='tab'){tab=t.dataset.t;ed=null;cfg=false;bk=null;pg._m=0;render()}
+else if(a=='goP'){tab='People';S.People=t.dataset.id;ed=null;cfg=false;bk=null;pg._m=0;render()}
 else if(a=='pg'){pg[tab]+=+t.dataset.d;pg._m=1;render();pg._m=0}
 else if(a=='sel'){S[t.dataset.k]=t.dataset.id;S.sc=null;ed=null;cfg=false;bk=null;pg._m=1;render();pg._m=0}
 else if(a=='cfg'){cfg=!cfg;ed=null;bk=null;render()}else if(a=='cfgx'){cfg=false;render()}
@@ -264,11 +285,12 @@ else if(a=='cfgsave'){const m=$('#s-m').value.trim().replace(/\/$/,'');try{local
 else if(a=='reload'){location.reload()}
 else if(a=='logout'){await logout();location.reload()}
 else if(a=='login'){$('#lgm').textContent='Signing in…';try{await gotrue('password',{email:$('#em').value.trim(),password:$('#pw').value});start()}catch(x){$('#lgm').textContent=x.message}}});
+document.addEventListener('input',e=>{if(e.target.id=='pq'){S.pq=e.target.value;pg.People=0;pg._m=1;fillShelf(pplList(),66,pcard,'People');pg._m=0}});
 document.addEventListener('change',async e=>{const t=e.target;if(t.name=='people'){t.parentNode.querySelector('[name=newp]').style.display=t.value=='__new'?'':'none'}if(t.dataset.up)upImg(t.files[0],t.dataset.up,t.dataset.n,t.dataset.r?ed.mp.find(x=>x.id==t.dataset.r):null,t.dataset.pv);
 });
 document.addEventListener('click',async e=>{const lb=e.target.closest('#lb');if(lb){lb.remove();return}const bg=e.target.closest('.big');if(bg){const s=D.Scene.find(x=>x.id==S.sc);if(!s||!s.image)return;let u=img(s.image);
 if(Media.folder.supported)try{if(await Media.folder.ensure())u=(await Media.folder.fileUrl(s.id))||u}catch(x){}
-if(u){const d=document.createElement('div');d.id='lb';d.innerHTML='<img src="'+u+'">';document.body.appendChild(d)}return}const f=e.target.closest('.fr');if(f){S.sc=f.dataset.id;render()}});
+if(u){const d=document.createElement('div');d.id='lb';d.innerHTML='<img src="'+u+'">';document.body.appendChild(d)}return}const f=e.target.closest('.fr:not(.nf)');if(f){S.sc=f.dataset.id;render()}});
 document.addEventListener('load',e=>{const i=e.target;if(i.tagName=='IMG'&&i.closest('.big'))i.style.objectFit=i.naturalWidth/i.naturalHeight>=4/3?'cover':'contain'},true);
 document.addEventListener('click',e=>{const q=e.target.closest('[data-pickmp]');if(q){$('#fi-mp-'+q.dataset.pickmp).click();return}const p=e.target.closest('[data-pick]');if(p){$('#fi-'+p.dataset.pick).click();return}
 const k=e.target.closest('[data-pk]');if(k&&ed){ed.row.thumb=k.dataset.pk;document.querySelectorAll('[data-pk]').forEach(x=>x.classList.toggle('on',x==k));$('#pv-thumb').innerHTML='<span class="phl">photo</span>'+IM(ed.row.thumb);hydrate();return}
