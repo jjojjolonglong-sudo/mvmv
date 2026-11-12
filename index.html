@@ -68,7 +68,8 @@ html{background:#0a0912;overscroll-behavior:none}html,body{position:fixed;inset:
 <div class="pane" id="T"></div><div class="pane" id="B"></div><div id="msg"></div></div>
 <div id="lg" hidden><h1>MVMV</h1><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" data-a="login">Sign in</button><div id="lgm" class="mut"></div></div>
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/config.js"></script>
-<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.v2.js"></script>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/core.v1.js" data-app="mvmv"></script>
+<script src="https://jjojjolonglong-sudo.github.io/mnmn/media.js"></script>
 <script src="https://jjojjolonglong-sudo.github.io/mnmn/mvtape.v1.js"></script>
 <script>
 const CFG=window.APP_CONFIG||{};   // 공용 설정(config.js). 못 불러와도(오프라인 등) 아래 값으로 동작해요
@@ -78,7 +79,7 @@ if(!window.Media)window.Media={init(){},url:()=>'',img:()=>'',newId:()=>crypto.r
 Media.init({app:'mvmv',worker:MEDIA,getToken:token});
 const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ---- auth / REST (독서앱과 동일 방식) ---- */
-const SES=()=>{try{return JSON.parse(localStorage.getItem('mvmv_sb')||'null')}catch(e){return null}},setSES=s=>{try{s?localStorage.setItem('mvmv_sb',JSON.stringify(s)):localStorage.removeItem('mvmv_sb')}catch(e){}};
+const SES=()=>{try{return JSON.parse(localStorage.getItem('jjojjo_ses')||'null')}catch(e){return null}},setSES=s=>{try{s?localStorage.setItem('jjojjo_ses',JSON.stringify(s)):localStorage.removeItem('jjojjo_ses')}catch(e){}};
 async function gotrue(g,b){const r=await fetch(`${SB}/auth/v1/token?grant_type=${g}`,{method:'POST',headers:{apikey:ANON,'Content-Type':'application/json'},body:JSON.stringify(b)}),j=await r.json();if(!r.ok)throw new Error(j.error_description||j.msg||j.error||'HTTP '+r.status);const s={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:Date.now()+(j.expires_in||3600)*1000,user:{id:j.user&&j.user.id,email:j.user&&j.user.email}};setSES(s);return s}
 let rfp=null;async function token(){let s=SES();if(!s)throw new Error('not signed in');if(s.expires_at-Date.now()<60000){rfp=rfp||gotrue('refresh_token',{refresh_token:s.refresh_token}).finally(()=>rfp=null);s=await rfp}return s.access_token}
 async function logout(){const s=SES();setSES(null);try{s&&await fetch(`${SB}/auth/v1/logout`,{method:'POST',headers:{apikey:ANON,Authorization:'Bearer '+s.access_token}})}catch(e){}}
