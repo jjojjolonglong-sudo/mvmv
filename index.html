@@ -30,6 +30,7 @@ h2{font:22px var(--se);color:#fff;text-shadow:0 0 8px var(--vi)}h4{font:9px var(
 .strip{scroll-snap-type:x mandatory;scroll-padding:0 8px}.strip .fr{scroll-snap-align:start}
 .fg{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 18px;scroll-padding:0 18px}.fg>div{flex:0 0 var(--fw,56px);min-width:0;scroll-snap-align:start}.fg .pst{width:100%;height:auto;aspect-ratio:2/3;margin:0 0 3px}.fg b{display:block;font-weight:400;font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fg small{display:block;font-size:11px;color:#cfcaf0}
 .fgw{position:relative}.fgw .pb{position:absolute;top:0;bottom:0;z-index:2;width:18px;background:#100f1c}.fgw .pb.l{left:-4px}.fgw .pb.r{right:-4px}.mstrip .fr{cursor:default}
+@media(hover:hover){.strip,.fg{cursor:grab}.mstrip .fr{cursor:grab}}.frdrag,.frdrag *{cursor:grabbing!important;user-select:none}.strip img,.fg img{-webkit-user-drag:none;user-select:none}
 #T{position:relative}.psrch{position:absolute;top:6px;right:10px;z-index:101;width:min(170px,45%);font:12px var(--se);background:#0b0a16;color:#fff;border:1px solid var(--pk);border-radius:4px;padding:3px 8px}
 .shelf.two{display:grid;grid-template-columns:repeat(var(--c),var(--ps));grid-auto-rows:max-content;justify-content:center;align-content:center;gap:6px 8px;padding-top:30px}.shelf.two .pc{width:var(--ps);align-self:start}.shelf.two .pc .ph{width:var(--ps);height:var(--ps)}
 .l{font-size:13px;margin:3px 0;color:#cfcaf0}.l b{color:var(--yl);font-weight:400}.rv{white-space:pre-wrap;margin-top:6px;border-left:3px solid var(--pk);padding-left:8px}.mut{color:#8a86a8;font-size:12px}
@@ -245,7 +246,8 @@ return L.filter(p=>[p.name,p.nation,...D.MP.filter(x=>x.people==p.id).map(x=>mv(
 function render(){const c0=$('#tabs');c0.innerHTML=['Movie','People','Scene'].map(t=>`<button class="tab ${t==tab?'on':''}" data-a="tab" data-t="${t}">${t.toUpperCase()}</button>`).join('');
 const mvs=[...D.Movie].sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999'))),ppl=pplList(),isP=tab=='People';
 $('#T').innerHTML=shelf()+(isP?`<input class="psrch" id="pq" placeholder="이름·국적·작품" value="${E(S.pq||'')}" autocomplete="off">`:'');fillShelf(isP?ppl:mvs,isP?66:sizes(),isP?pcard:tape,isP?'People':'Movie');
-$('#B').innerHTML=ed?formB():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(ed&&ed.sh=='Scene')tder();bulkModal();fgFit();if(cfg&&!ed)showInst()}
+const rk=frKey(),rx=[...document.querySelectorAll('#B .strip,#B .fg')].map(g=>g.scrollLeft);
+$('#B').innerHTML=ed?formB():cfg?cfgHtml():tab=='Movie'?movB():isP?peoB():scnB();hydrate();if(ed&&ed.up)ub();if(ed&&ed.sh=='Scene')tder();bulkModal();fgFit();if(cfg&&!ed)showInst();frRestore(rk,rx)}
 /* 필모 한 줄: 카드 폭을 약 56px 기준으로, 보이는 칸 수가 딱 떨어지게 맞춰요(모바일 5개쯤, PC는 폭에 따라) */
 function fgFit(){document.querySelectorAll('.fg').forEach(g=>{const a=g.clientWidth-36,n=Math.max(1,Math.floor((a+6)/(56+6)));g.style.setProperty('--fw',((a-(n-1)*6)/n)+'px')})}
 const bar=(t,b)=>`<div class="bh">${t}<i></i>${b}</div>`;
@@ -341,6 +343,39 @@ async function start(){const s=SES();if(!s){showLogin();return}ME=s.user;FN=awai
 const c=await idbGet('data:'+ME.id);if(c&&c.Movie){D=c;D.Episode=D.Episode||[];$('#lg').hidden=true;render()}
 try{const ks=Object.keys(TB),rs=await Promise.all(ks.map(selAll)),j={};ks.forEach((k,i)=>j[k]=rs[i]);if(!wq.length&&!wbusy&&!ed&&!cfg&&!bk){D=j;idbSet('data:'+ME.id,j);$('#lg').hidden=true;render()}}
 catch(e){if(/refresh|jwt|expired|not signed/i.test(e.message)){await logout();showLogin('Session expired.')}else if(!D)showLogin('Could not load: '+e.message)}}
+
+/* ---- 필름롤 넘기기 (영화·인물 상세의 SCENE, 장면 탭, 필모그래피) ----
+   마우스: 끌면 한 칸마다 살짝 걸리면서(드르륵) 넘어가고, 놓으면 던진 세기만큼 미끄러지다 칸에 맞춰 멈춰요.
+   장면 탭 필름롤 위에서는 휠 한 칸 = 장면 한 칸. 손가락(터치)은 원래 스크롤(칸 맞춤)을 그대로 써요. */
+const FR_DET=.45,FR_THROW=170,FR_MAXN=14;   // 칸마다 걸리는 세기(0~1, 클수록 또렷) · 던짐 거리(ms) · 한 번에 최대 칸 수
+let FRK='',FRA=null;
+const frKey=()=>[tab,S.Movie,S.People,ed?1:0,cfg?1:0].join('|');
+function frRestore(k,xs){if(k!==FRK){FRK=k;return}const L=[...document.querySelectorAll('#B .strip,#B .fg')];L.forEach((g,i)=>{if(xs[i]!=null)g.scrollLeft=xs[i]});
+  const on=document.querySelector('#strip .fr.on');if(on){const g=on.parentNode,r=on.getBoundingClientRect(),q=g.getBoundingClientRect();if(r.left<q.left||r.right>q.right)frGo(g,frNear(g,g.scrollLeft+r.left-q.left-8),220)}}
+function frSnaps(g){const c=[...g.children].filter(x=>x.offsetWidth),max=g.scrollWidth-g.clientWidth;if(!c.length||max<=0)return[0];   // 브라우저의 칸 맞춤(scroll-padding 기준)과 같은 자리
+  const r=g.getBoundingClientRect().left+g.clientLeft-g.scrollLeft+(parseFloat(getComputedStyle(g).scrollPaddingLeft)||0);
+  const s=[...new Set(c.map(x=>Math.round(Math.min(max,Math.max(0,x.getBoundingClientRect().left-r)))))];if(s[s.length-1]<max)s.push(max);return s.sort((a,b)=>a-b)}
+const frNear=(g,x)=>{const s=frSnaps(g);return s.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a,s[0])};
+function frDet(g,x,S_){const s=S_||frSnaps(g),max=s[s.length-1];if(x<=0||x>=max)return Math.max(0,Math.min(max,x));let i=0;while(i<s.length-2&&x>=s[i+1])i++;
+  const a=s[i],b=s[i+1],t=(x-a)/(b-a);return a+(b-a)*(t-FR_DET/(2*Math.PI)*Math.sin(2*Math.PI*t))}   // 칸 근처에선 느리게, 칸 사이에선 빠르게 → 드르륵
+function frGo(g,to,ms){if(FRA&&FRA.g===g)cancelAnimationFrame(FRA.r);const from=g.scrollLeft,S_=frSnaps(g),t0=performance.now();g.style.scrollSnapType='none';
+  const st=n=>{const p=Math.min(1,(n-t0)/ms),e=1-Math.pow(1-p,3);g.scrollLeft=frDet(g,from+(to-from)*e,S_);if(p<1)FRA={g,r:requestAnimationFrame(st)};else{g.scrollLeft=to;g.style.scrollSnapType='';FRA=null}};FRA={g,r:requestAnimationFrame(st)}}
+let FRD=null;
+document.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.button!==0)return;const g=e.target.closest('.strip,.fg');if(!g||g.scrollWidth<=g.clientWidth+1)return;
+  if(FRA&&FRA.g===g){cancelAnimationFrame(FRA.r);FRA=null}FRD={g,x0:e.clientX,s0:g.scrollLeft,S:frSnaps(g),moved:false,h:[[performance.now(),e.clientX]],id:e.pointerId}});
+document.addEventListener('pointermove',e=>{const d=FRD;if(!d||e.pointerId!==d.id)return;const dx=e.clientX-d.x0;
+  if(!d.moved){if(Math.abs(dx)<5)return;d.moved=true;d.g.style.scrollSnapType='none';d.g.classList.add('frdrag');try{d.g.setPointerCapture(e.pointerId)}catch(_){}}
+  d.g.scrollLeft=frDet(d.g,d.s0-dx,d.S);const n=performance.now();d.h.push([n,e.clientX]);while(d.h.length>2&&n-d.h[0][0]>90)d.h.shift()});
+function frEnd(e){const d=FRD;if(!d||e.pointerId!==d.id)return;FRD=null;if(!d.moved)return;d.g.classList.remove('frdrag');
+  const n=performance.now(),a=d.h[0],v=n-a[0]>0&&n-d.h[d.h.length-1][0]<60?(e.clientX-a[1])/(n-a[0]):0,raw=d.s0-(e.clientX-d.x0),stp=(d.S[1]-d.S[0])||80;
+  const pr=raw-Math.max(-FR_MAXN*stp,Math.min(FR_MAXN*stp,v*FR_THROW)),to=frNear(d.g,pr),k=Math.abs(to-d.g.scrollLeft)/stp;frGo(d.g,to,Math.min(650,170+k*45));
+  const kill=ev=>{ev.stopPropagation();ev.preventDefault()};document.addEventListener('click',kill,{capture:true,once:true});setTimeout(()=>document.removeEventListener('click',kill,{capture:true}),0)}
+document.addEventListener('pointerup',frEnd);document.addEventListener('pointercancel',frEnd);
+document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest('.strip,.fg'))e.preventDefault()});
+let FRW={g:null,to:0,acc:0,t:0};
+document.addEventListener('wheel',e=>{const g=e.target.closest&&e.target.closest('#strip');if(!g||g.scrollWidth<=g.clientWidth+1||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
+  e.preventDefault();const n=performance.now();if(FRW.g!==g||n-FRW.t>400){FRW={g,to:frNear(g,g.scrollLeft),acc:0,t:n}}FRW.t=n;FRW.acc+=e.deltaMode?e.deltaY*40:e.deltaY;
+  const S_=frSnaps(g);let i=S_.indexOf(FRW.to);if(i<0)i=S_.indexOf(frNear(g,FRW.to));const u=Math.trunc(FRW.acc/40);if(!u)return;FRW.acc-=u*40;i=Math.max(0,Math.min(S_.length-1,i+u));FRW.to=S_[i];frGo(g,FRW.to,190)},{passive:false});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 start();
 </script></body></html>
